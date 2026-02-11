@@ -3,6 +3,7 @@ import styles from './SetupScreen.module.css';
 import ToggleGroup from '../common/ToggleGroup';
 import Button from '../common/Button';
 import { SyllableGameConfig } from '../../data/types';
+import { OPEN_SYLLABLE_COUNT, CLOSED_SYLLABLE_COUNT } from '../../data/hangul';
 import { useLanguage } from '../../i18n';
 
 interface SyllableSetupScreenProps {
@@ -26,8 +27,8 @@ export default function SyllableSetupScreen({ onStartGame }: SyllableSetupScreen
   ];
 
   const totalCombinations = includeBatchim === 'with'
-    ? 19 * 21 * 27
-    : 19 * 21;
+    ? CLOSED_SYLLABLE_COUNT
+    : OPEN_SYLLABLE_COUNT;
 
   const handleStart = () => {
     onStartGame({
