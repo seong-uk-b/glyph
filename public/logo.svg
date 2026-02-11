@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#21252b"/>
+      <stop offset="100%" stop-color="#1a1d23"/>
+    </linearGradient>
+
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e06c75"/>
+      <stop offset="45%" stop-color="#c678dd"/>
+      <stop offset="100%" stop-color="#61afef"/>
+    </linearGradient>
+
+    <linearGradient id="gold" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#e5c07b"/>
+      <stop offset="100%" stop-color="#d19a66"/>
+    </linearGradient>
+
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="softGlow">
+      <feGaussianBlur stdDeviation="22"/>
+    </filter>
+  </defs>
+
+  <!-- 배경 -->
+  <rect width="512" height="512" rx="108" fill="url(#bg)"/>
+  <rect x="2" y="2" width="508" height="508" rx="106"
+        fill="none" stroke="url(#grad)" stroke-width="1" opacity="0.15"/>
+
+  <!-- 앰비언트 글로우 -->
+  <g filter="url(#softGlow)" opacity="0.2">
+    <path d="M 145,222 Q 256,118 367,222"
+          stroke="url(#grad)" stroke-width="46" fill="none"/>
+    <path d="M 256,240 L 256,375"
+          stroke="url(#grad)" stroke-width="42" fill="none"/>
+    <line x1="184" y1="304" x2="328" y2="304"
+          stroke="url(#grad)" stroke-width="42"/>
+  </g>
+
+  <!-- 메인 획 -->
+  <g filter="url(#glow)">
+    <!-- 宀 아치 (갓머리) -->
+    <path d="M 145,222 Q 256,118 367,222"
+          stroke="url(#grad)" stroke-width="24" fill="none" stroke-linecap="round"/>
+
+    <!-- 子 세로획 + 갈고리 -->
+    <path d="M 256,240 L 256,375 Q 258,393 282,383"
+          stroke="url(#grad)" stroke-width="20" fill="none"
+          stroke-linecap="round" stroke-linejoin="round"/>
+
+    <!-- 子 가로획 -->
+    <line x1="184" y1="304" x2="328" y2="304"
+          stroke="url(#grad)" stroke-width="20" stroke-linecap="round"/>
+  </g>
+
+  <!-- 宀 점 (골드 악센트) -->
+  <circle cx="256" cy="138" r="13" fill="url(#gold)"/>
+</svg>

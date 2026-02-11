@@ -1,0 +1,128 @@
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  animation: fadeIn 0.4s ease;
+}
+
+.gradeSection {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.grade {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.accuracyRing {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 3px solid var(--border-primary);
+  background: var(--bg-secondary);
+}
+
+.accuracyValue {
+  font-family: var(--font-mono);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-bright);
+}
+
+.stats {
+  display: flex;
+  justify-content: center;
+  gap: 2.5rem;
+  margin-bottom: 2rem;
+  padding: 1.25rem;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-subtle);
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.statValue {
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-bright);
+}
+
+.statLabel {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.missedSection {
+  margin-bottom: 2rem;
+}
+
+.missedTitle {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-bright);
+  margin-bottom: 0.75rem;
+}
+
+.missedList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.missedItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.75rem 1rem;
+  background: rgba(224, 108, 117, 0.08);
+  border: 1px solid rgba(224, 108, 117, 0.2);
+  border-radius: var(--radius-md);
+}
+
+.missedWord {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.expression {
+  font-family: var(--font-japanese);
+  font-size: 1.125rem;
+  color: var(--accent-yellow);
+}
+
+.reading {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.missedMeaning {
+  font-size: 0.875rem;
+  color: var(--text-primary);
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

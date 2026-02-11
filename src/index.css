@@ -1,0 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Noto+Sans+JP:wght@400;500;700&display=swap');
+
+:root {
+  --bg-primary: #1e2127;
+  --bg-secondary: #282c34;
+  --bg-tertiary: #2c313a;
+  --bg-hover: #333842;
+  --bg-active: #3e4452;
+
+  --text-primary: #abb2bf;
+  --text-secondary: #636d83;
+  --text-bright: #d7dae0;
+  --text-heading: #e5c07b;
+
+  --accent-blue: #61afef;
+  --accent-green: #98c379;
+  --accent-red: #e06c75;
+  --accent-yellow: #e5c07b;
+  --accent-purple: #c678dd;
+  --accent-cyan: #56b6c2;
+  --accent-orange: #d19a66;
+
+  --border-primary: #3e4452;
+  --border-subtle: #2c313a;
+  --border-focus: #528bff;
+
+  --font-primary: 'Segoe UI', 'Roboto', 'Oxygen', sans-serif;
+  --font-mono: 'Fira Code', 'Consolas', monospace;
+  --font-japanese: 'Noto Sans JP', 'Yu Gothic', sans-serif;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+::selection {
+  background-color: rgba(97, 175, 239, 0.3);
+  color: var(--text-bright);
+}
+
+input, button {
+  font-family: inherit;
+}

@@ -1,0 +1,21 @@
+{
+  "short_name": "Glyph",
+  "name": "Glyph - Language Learning App",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#1e2127",
+  "background_color": "#1e2127"
+}

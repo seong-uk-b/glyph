@@ -1,0 +1,23 @@
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem;
+  animation: fadeIn 0.3s ease;
+}
+
+.topBar {
+  margin-bottom: 1rem;
+}
+
+.scoreArea {
+  margin-bottom: 0.5rem;
+}
+
+.inputArea {
+  margin-top: 1rem;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

@@ -1,0 +1,78 @@
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  outline: none;
+}
+
+.option:hover:not(:disabled) {
+  background: var(--bg-hover);
+  border-color: var(--text-secondary);
+}
+
+.option:focus-visible {
+  box-shadow: 0 0 0 2px var(--border-focus);
+}
+
+.keyHint {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  background: var(--bg-primary);
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+}
+
+.optionText {
+  font-family: var(--font-mono);
+  font-size: 1.0625rem;
+  color: var(--text-bright);
+}
+
+.correct {
+  background: rgba(152, 195, 121, 0.15);
+  border-color: var(--accent-green);
+}
+
+.correct .optionText {
+  color: var(--accent-green);
+}
+
+.wrong {
+  background: rgba(224, 108, 117, 0.15);
+  border-color: var(--accent-red);
+  animation: shake 0.4s ease;
+}
+
+.wrong .optionText {
+  color: var(--accent-red);
+}
+
+.dimmed {
+  opacity: 0.35;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-3px); }
+  40%, 80% { transform: translateX(3px); }
+}

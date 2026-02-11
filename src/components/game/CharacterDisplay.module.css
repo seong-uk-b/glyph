@@ -1,0 +1,36 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 2rem 0;
+  animation: scaleIn 0.3s ease;
+}
+
+.typeLabel {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-family: var(--font-mono);
+}
+
+.character {
+  font-family: var(--font-japanese);
+  font-size: 8rem;
+  line-height: 1;
+  color: var(--accent-yellow);
+  text-shadow: 0 0 40px rgba(229, 192, 123, 0.15);
+  user-select: none;
+}
+
+@media (min-width: 600px) {
+  .character {
+    font-size: 10rem;
+  }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
+}
