@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import styles from './Header.module.css';
 import { useLanguage } from '../../i18n';
 import { Language } from '../../i18n/translations';
@@ -18,6 +19,21 @@ const LANG_OPTIONS: { value: Language; label: string }[] = [
 
 export default function Header({ showBack, onBack, onHome, showLangSwitch = false, onReleaseNotes }: HeaderProps) {
   const { language, setLanguage, learnLanguage, t } = useLanguage();
+  const [showLangHint, setShowLangHint] = useState(false);
+
+  useEffect(() => {
+    if (showLangSwitch && !localStorage.getItem('hasUsedLangSwitch')) {
+      setShowLangHint(true);
+    }
+  }, [showLangSwitch]);
+
+  const handleLangClick = (lang: Language) => {
+    setLanguage(lang);
+    if (showLangHint) {
+      localStorage.setItem('hasUsedLangSwitch', '1');
+      setShowLangHint(false);
+    }
+  };
 
   // Disable UI language that matches learn language
   const disabledLang: Language | null = learnLanguage === 'japanese' ? 'ja' : learnLanguage === 'korean' ? 'ko' : null;
@@ -59,7 +75,7 @@ export default function Header({ showBack, onBack, onHome, showLangSwitch = fals
                 <button
                   key={opt.value}
                   className={`${styles.langBtn} ${language === opt.value ? styles.langActive : ''} ${isDisabled ? styles.langDisabled : ''}`}
-                  onClick={() => !isDisabled && setLanguage(opt.value)}
+                  onClick={() => !isDisabled && handleLangClick(opt.value)}
                   disabled={isDisabled}
                   title={isDisabled ? t.cannotSelectSameLang : undefined}
                 >
@@ -67,6 +83,7 @@ export default function Header({ showBack, onBack, onHome, showLangSwitch = fals
                 </button>
               );
             })}
+            {showLangHint && <span className={styles.langHintDot} />}
           </div>
         ) : (
           <div className={styles.spacer} />

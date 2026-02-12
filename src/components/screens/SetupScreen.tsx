@@ -12,7 +12,8 @@ interface SetupScreenProps {
 }
 
 export default function SetupScreen({ onStartGame }: SetupScreenProps) {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const rowSuffix: Record<string, string> = { ko: '행', ja: '行', en: '-row' };
   const [characterType, setCharacterType] = useState<CharacterType>('hiragana');
   const [gameMode, setGameMode] = useState<GameMode>('multipleChoice');
   const [selectedRowIds, setSelectedRowIds] = useState<string[]>(['a']);
@@ -32,7 +33,7 @@ export default function SetupScreen({ onStartGame }: SetupScreenProps) {
   const gridItems = rows.map(row => ({
     id: row.id,
     label: row.label,
-    sublabel: row.labelRomaji,
+    sublabel: `${row.id}${rowSuffix[language]}`,
   }));
 
   const rowChars = rows

@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './ReleaseNotesScreen.module.css';
 import { useLanguage } from '../../i18n';
-import { Language } from '../../i18n/translations';
+import { Language, translations } from '../../i18n/translations';
 import { releaseNotes } from '../../data/releaseNotes';
 
 const LANG_OPTIONS: { value: Language; label: string }[] = [
@@ -11,8 +11,13 @@ const LANG_OPTIONS: { value: Language; label: string }[] = [
 ];
 
 export default function ReleaseNotesScreen() {
-  const { t, language } = useLanguage();
+  const { language } = useLanguage();
   const [noteLang, setNoteLang] = useState<Language>(language);
+  const t = translations[noteLang];
+
+  useEffect(() => {
+    setNoteLang(language);
+  }, [language]);
 
   return (
     <div className={styles.container}>

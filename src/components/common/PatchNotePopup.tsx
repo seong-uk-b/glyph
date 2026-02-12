@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import styles from './PatchNotePopup.module.css';
 import { useLanguage } from '../../i18n';
 import { releaseNotes } from '../../data/releaseNotes';
@@ -41,24 +42,21 @@ interface PatchNotePopupProps {
 export default function PatchNotePopup({ onDismiss, onViewAll }: PatchNotePopupProps) {
   const { t, language } = useLanguage();
   const latest = releaseNotes[0];
+  const [closing, setClosing] = useState(false);
 
-  const handleDismiss = () => {
+  const close = (callback: () => void) => {
     markVersionSeen();
-    onDismiss();
-  };
-
-  const handleViewAll = () => {
-    markVersionSeen();
-    onViewAll();
+    setClosing(true);
+    setTimeout(callback, 250);
   };
 
   const handleOverlayClick = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) handleDismiss();
+    if (e.target === e.currentTarget) close(onDismiss);
   };
 
   return (
-    <div className={styles.overlay} onClick={handleOverlayClick}>
-      <div className={styles.sheet}>
+    <div className={`${styles.overlay} ${closing ? styles.overlayClosing : ''}`} onClick={handleOverlayClick}>
+      <div className={`${styles.sheet} ${closing ? styles.sheetClosing : ''}`}>
         <div className={styles.handle} />
         <div className={styles.header}>
           <h3 className={styles.title}>{t.whatsNew}</h3>
@@ -72,10 +70,10 @@ export default function PatchNotePopup({ onDismiss, onViewAll }: PatchNotePopupP
           </ul>
         </div>
         <div className={styles.actions}>
-          <button className={styles.dismissBtn} onClick={handleDismiss}>
+          <button className={styles.dismissBtn} onClick={() => close(onDismiss)}>
             {t.dismiss}
           </button>
-          <button className={styles.viewAllBtn} onClick={handleViewAll}>
+          <button className={styles.viewAllBtn} onClick={() => close(onViewAll)}>
             {t.viewAll}
           </button>
         </div>
