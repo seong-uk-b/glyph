@@ -1,6 +1,7 @@
 import styles from './WordResultScreen.module.css';
 import Button from '../common/Button';
 import { WordQuestionResult, WordGameConfig } from '../../data/types';
+import { getMeaning } from '../../utils/wordUtils';
 import { useLanguage } from '../../i18n';
 
 interface WordResultScreenProps {
@@ -72,9 +73,13 @@ export default function WordResultScreen({
               <div key={i} className={styles.missedItem}>
                 <div className={styles.missedWord}>
                   <span className={styles.expression}>{r.question.word.expression}</span>
-                  <span className={styles.reading}>{r.question.word.reading}</span>
+                  {r.question.word.reading && (
+                    <span className={styles.reading}>{r.question.word.reading}</span>
+                  )}
                 </div>
-                <div className={styles.missedMeaning}>{r.question.word.meaning}</div>
+                <div className={styles.missedMeaning}>
+                  {config ? getMeaning(r.question.word, config.meaningLanguage) : r.question.word.meanings.en}
+                </div>
               </div>
             ))}
           </div>

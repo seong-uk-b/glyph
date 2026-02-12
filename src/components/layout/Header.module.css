@@ -74,6 +74,26 @@
   background: var(--bg-tertiary);
 }
 
+.releaseNotesBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  background: none;
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.releaseNotesBtn:hover {
+  color: var(--text-bright);
+  border-color: var(--border-primary);
+  background: var(--bg-tertiary);
+}
+
 .langSwitch {
   display: flex;
   gap: 2px;

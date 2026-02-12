@@ -5,6 +5,7 @@ export interface Translations {
   appTitle: string;
   back: string;
   footerText: string;
+  madeBy: string;
 
   // Home Screen
   homeSubtitle: string;
@@ -92,6 +93,14 @@ export interface Translations {
   changeSettings: string;
   home: string;
 
+  // Release Notes
+  releaseNotes: string;
+  releaseNotesTitle: string;
+  whatsNew: string;
+  dismiss: string;
+  viewAll: string;
+  docs: string;
+
   // Common
   selectAll: string;
   clearAll: string;
@@ -102,7 +111,8 @@ const en: Translations = {
   // Header & Footer
   appTitle: 'Glyph',
   back: '← Back',
-  footerText: 'Glyph v0.7',
+  footerText: 'Glyph v0.9',
+  madeBy: 'Made by',
 
   // Home Screen
   homeSubtitle: 'What would you like to learn?',
@@ -190,6 +200,14 @@ const en: Translations = {
   changeSettings: 'Change Settings',
   home: 'Home',
 
+  // Release Notes
+  releaseNotes: 'Updates',
+  releaseNotesTitle: 'Release Notes',
+  whatsNew: "What's New",
+  dismiss: 'Close',
+  viewAll: 'View All',
+  docs: 'Docs',
+
   // Common
   selectAll: 'Select All',
   clearAll: 'Clear All',
@@ -200,7 +218,8 @@ const ko: Translations = {
   // Header & Footer
   appTitle: '글리프',
   back: '← 뒤로',
-  footerText: '글리프 v0.7',
+  footerText: '글리프 v0.9',
+  madeBy: 'Made by',
 
   // Home Screen
   homeSubtitle: '무엇을 배우고 싶으세요?',
@@ -288,6 +307,14 @@ const ko: Translations = {
   changeSettings: '설정 변경',
   home: '홈',
 
+  // Release Notes
+  releaseNotes: '업데이트',
+  releaseNotesTitle: '릴리즈 노트',
+  whatsNew: '새로운 소식',
+  dismiss: '닫기',
+  viewAll: '전체 보기',
+  docs: '문서',
+
   // Common
   selectAll: '전체 선택',
   clearAll: '전체 해제',
@@ -298,7 +325,8 @@ const ja: Translations = {
   // Header & Footer
   appTitle: 'グリフ',
   back: '← 戻る',
-  footerText: 'グリフ v0.7',
+  footerText: 'グリフ v0.9',
+  madeBy: 'Made by',
 
   // Home Screen
   homeSubtitle: '何を学びたいですか？',
@@ -385,6 +413,14 @@ const ja: Translations = {
   playAgain: 'もう一度',
   changeSettings: '設定変更',
   home: 'ホーム',
+
+  // Release Notes
+  releaseNotes: '更新情報',
+  releaseNotesTitle: 'リリースノート',
+  whatsNew: '最新アップデート',
+  dismiss: '閉じる',
+  viewAll: 'すべて見る',
+  docs: 'ドキュメント',
 
   // Common
   selectAll: '全選択',

@@ -3,6 +3,7 @@ import './styles/animations.css';
 import { LanguageProvider } from './i18n';
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
+import PatchNotePopup, { shouldShowPatchNote } from './components/common/PatchNotePopup';
 import HomeScreen from './components/screens/HomeScreen';
 import SetupScreen from './components/screens/SetupScreen';
 import GameScreen from './components/screens/GameScreen';
@@ -15,22 +16,19 @@ import HangulResultScreen from './components/screens/HangulResultScreen';
 import WordSetupScreen from './components/screens/WordSetupScreen';
 import WordGameScreen from './components/screens/WordGameScreen';
 import WordResultScreen from './components/screens/WordResultScreen';
-import KoreanWordSetupScreen from './components/screens/KoreanWordSetupScreen';
-import KoreanWordGameScreen from './components/screens/KoreanWordGameScreen';
-import KoreanWordResultScreen from './components/screens/KoreanWordResultScreen';
 import SyllableSetupScreen from './components/screens/SyllableSetupScreen';
 import SyllableGameScreen from './components/screens/SyllableGameScreen';
 import SyllableResultScreen from './components/screens/SyllableResultScreen';
+import ReleaseNotesScreen from './components/screens/ReleaseNotesScreen';
 import {
   GameConfig, QuestionResult,
   WordGameConfig, WordQuestionResult,
   HangulGameConfig, HangulQuestionResult,
-  KoreanWordGameConfig, KoreanWordQuestionResult,
   SyllableGameConfig, SyllableQuestionResult,
 } from './data/types';
 
 type Screen =
-  | 'home'
+  | 'home' | 'releaseNotes'
   | 'setup' | 'game' | 'result' | 'chart'
   | 'hangulChart' | 'hangulSetup' | 'hangulGame' | 'hangulResult'
   | 'wordSetup' | 'wordGame' | 'wordResult'
@@ -39,18 +37,18 @@ type Screen =
 
 function App() {
   const [currentScreen, setCurrentScreen] = useState<Screen>('home');
+  const [showPatchNote, setShowPatchNote] = useState(() => shouldShowPatchNote());
   const [gameConfig, setGameConfig] = useState<GameConfig | null>(null);
   const [lastResults, setLastResults] = useState<QuestionResult[]>([]);
   const [wordGameConfig, setWordGameConfig] = useState<WordGameConfig | null>(null);
   const [wordLastResults, setWordLastResults] = useState<WordQuestionResult[]>([]);
   const [hangulGameConfig, setHangulGameConfig] = useState<HangulGameConfig | null>(null);
   const [hangulLastResults, setHangulLastResults] = useState<HangulQuestionResult[]>([]);
-  const [koreanWordGameConfig, setKoreanWordGameConfig] = useState<KoreanWordGameConfig | null>(null);
-  const [koreanWordLastResults, setKoreanWordLastResults] = useState<KoreanWordQuestionResult[]>([]);
   const [syllableGameConfig, setSyllableGameConfig] = useState<SyllableGameConfig | null>(null);
   const [syllableLastResults, setSyllableLastResults] = useState<SyllableQuestionResult[]>([]);
 
   const goHome = useCallback(() => setCurrentScreen('home'), []);
+  const goReleaseNotes = useCallback(() => setCurrentScreen('releaseNotes'), []);
   const goSetup = useCallback(() => setCurrentScreen('setup'), []);
   const goChart = useCallback(() => setCurrentScreen('chart'), []);
   const goHangulChart = useCallback(() => setCurrentScreen('hangulChart'), []);
@@ -74,19 +72,22 @@ function App() {
     if (gameConfig) setCurrentScreen('game');
   }, [gameConfig]);
 
-  // Word game handlers
+  // Word game handlers (일본어 + 한국어 통합)
   const startWordGame = useCallback((config: WordGameConfig) => {
     setWordGameConfig(config);
-    setCurrentScreen('wordGame');
+    setCurrentScreen(config.lang === 'ko' ? 'koreanWordGame' : 'wordGame');
   }, []);
 
   const finishWordGame = useCallback((results: WordQuestionResult[]) => {
     setWordLastResults(results);
-    setCurrentScreen('wordResult');
+    const lang = results[0]?.question.word.lang;
+    setCurrentScreen(lang === 'ko' ? 'koreanWordResult' : 'wordResult');
   }, []);
 
   const playWordAgain = useCallback(() => {
-    if (wordGameConfig) setCurrentScreen('wordGame');
+    if (wordGameConfig) {
+      setCurrentScreen(wordGameConfig.lang === 'ko' ? 'koreanWordGame' : 'wordGame');
+    }
   }, [wordGameConfig]);
 
   // Hangul game handlers
@@ -104,21 +105,6 @@ function App() {
     if (hangulGameConfig) setCurrentScreen('hangulGame');
   }, [hangulGameConfig]);
 
-  // Korean word game handlers
-  const startKoreanWordGame = useCallback((config: KoreanWordGameConfig) => {
-    setKoreanWordGameConfig(config);
-    setCurrentScreen('koreanWordGame');
-  }, []);
-
-  const finishKoreanWordGame = useCallback((results: KoreanWordQuestionResult[]) => {
-    setKoreanWordLastResults(results);
-    setCurrentScreen('koreanWordResult');
-  }, []);
-
-  const playKoreanWordAgain = useCallback(() => {
-    if (koreanWordGameConfig) setCurrentScreen('koreanWordGame');
-  }, [koreanWordGameConfig]);
-
   // Syllable game handlers
   const startSyllableGame = useCallback((config: SyllableGameConfig) => {
     setSyllableGameConfig(config);
@@ -135,7 +121,8 @@ function App() {
   }, [syllableGameConfig]);
 
   const showBack = currentScreen !== 'home';
-  const onBack = currentScreen === 'setup' ? goHome
+  const onBack = currentScreen === 'releaseNotes' ? goHome
+    : currentScreen === 'setup' ? goHome
     : currentScreen === 'game' ? goSetup
     : currentScreen === 'result' ? goSetup
     : currentScreen === 'chart' ? goHome
@@ -160,7 +147,7 @@ function App() {
 
   return (
     <LanguageProvider>
-      <Header showBack={showBack} onBack={onBack} onHome={goHome} showLangSwitch={!hideLanguageSwitch} />
+      <Header showBack={showBack} onBack={onBack} onHome={goHome} showLangSwitch={!hideLanguageSwitch} onReleaseNotes={currentScreen === 'home' ? goReleaseNotes : undefined} />
       <main style={{ flex: 1 }}>
         {currentScreen === 'home' && (
           <HomeScreen
@@ -173,6 +160,7 @@ function App() {
             onKoreanWords={goKoreanWordSetup}
           />
         )}
+        {currentScreen === 'releaseNotes' && <ReleaseNotesScreen />}
         {currentScreen === 'chart' && <ChartScreen />}
         {currentScreen === 'hangulChart' && <HangulChartScreen />}
         {currentScreen === 'setup' && <SetupScreen onStartGame={startGame} />}
@@ -189,19 +177,19 @@ function App() {
         {currentScreen === 'hangulResult' && (
           <HangulResultScreen results={hangulLastResults} onPlayAgain={playHangulAgain} onChangeSettings={goHangulSetup} onHome={goHome} />
         )}
-        {currentScreen === 'wordSetup' && <WordSetupScreen onStartGame={startWordGame} />}
+        {currentScreen === 'wordSetup' && <WordSetupScreen lang="ja" onStartGame={startWordGame} />}
         {currentScreen === 'wordGame' && wordGameConfig && (
           <WordGameScreen key={Date.now()} config={wordGameConfig} onFinish={finishWordGame} onQuit={goWordSetup} />
         )}
         {currentScreen === 'wordResult' && (
           <WordResultScreen results={wordLastResults} config={wordGameConfig} onPlayAgain={playWordAgain} onChangeSettings={goWordSetup} onHome={goHome} />
         )}
-        {currentScreen === 'koreanWordSetup' && <KoreanWordSetupScreen onStartGame={startKoreanWordGame} />}
-        {currentScreen === 'koreanWordGame' && koreanWordGameConfig && (
-          <KoreanWordGameScreen key={Date.now()} config={koreanWordGameConfig} onFinish={finishKoreanWordGame} onQuit={goKoreanWordSetup} />
+        {currentScreen === 'koreanWordSetup' && <WordSetupScreen lang="ko" onStartGame={startWordGame} />}
+        {currentScreen === 'koreanWordGame' && wordGameConfig && (
+          <WordGameScreen key={Date.now()} config={wordGameConfig} onFinish={finishWordGame} onQuit={goKoreanWordSetup} />
         )}
         {currentScreen === 'koreanWordResult' && (
-          <KoreanWordResultScreen results={koreanWordLastResults} config={koreanWordGameConfig} onPlayAgain={playKoreanWordAgain} onChangeSettings={goKoreanWordSetup} onHome={goHome} />
+          <WordResultScreen results={wordLastResults} config={wordGameConfig} onPlayAgain={playWordAgain} onChangeSettings={goKoreanWordSetup} onHome={goHome} />
         )}
         {currentScreen === 'syllableSetup' && <SyllableSetupScreen onStartGame={startSyllableGame} />}
         {currentScreen === 'syllableGame' && syllableGameConfig && (
@@ -212,6 +200,12 @@ function App() {
         )}
       </main>
       <Footer />
+      {showPatchNote && (
+        <PatchNotePopup
+          onDismiss={() => setShowPatchNote(false)}
+          onViewAll={() => { setShowPatchNote(false); setCurrentScreen('releaseNotes'); }}
+        />
+      )}
     </LanguageProvider>
   );
 }

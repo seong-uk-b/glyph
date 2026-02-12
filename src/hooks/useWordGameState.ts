@@ -8,15 +8,8 @@ import {
 } from '../data/types';
 import { getWordsByLevels } from '../data/words';
 import { shuffle } from '../utils/gameLogic';
+import { getMeaning, getWordLabel } from '../utils/wordUtils';
 import { useGameStateBase } from './useGameStateBase';
-
-// 언어 설정에 따라 한국어 또는 영어 뜻을 반환
-function getMeaning(word: Word, language: MeaningLanguage): string {
-  if (language === 'ko' && word.meaningKo) {
-    return word.meaningKo;
-  }
-  return word.meaning;
-}
 
 // 오답 선택지를 포함한 4지선다 옵션 생성
 function generateWordOptions(
@@ -27,7 +20,7 @@ function generateWordOptions(
   count: number = 4
 ): string[] {
   const correctAnswer = mode === 'meaningToWord'
-    ? `${correctWord.expression} (${correctWord.reading})`
+    ? getWordLabel(correctWord)
     : getMeaning(correctWord, language);
 
   const otherWords = allWords.filter(w => w.expression !== correctWord.expression);
@@ -35,12 +28,11 @@ function generateWordOptions(
 
   const wrongOptions = shuffledOthers.map(w =>
     mode === 'meaningToWord'
-      ? `${w.expression} (${w.reading})`
+      ? getWordLabel(w)
       : getMeaning(w, language)
   );
 
-  const options = shuffle([correctAnswer, ...wrongOptions]);
-  return options;
+  return shuffle([correctAnswer, ...wrongOptions]);
 }
 
 export function useWordGameState(config: WordGameConfig) {
@@ -51,10 +43,10 @@ export function useWordGameState(config: WordGameConfig) {
     const selected = shuffled.slice(0, config.questionCount);
 
     return selected.map(word => {
-      const options = generateWordOptions(word, allWords, config.gameMode, config.language);
+      const options = generateWordOptions(word, allWords, config.gameMode, config.meaningLanguage);
       const correctAnswer = config.gameMode === 'meaningToWord'
-        ? `${word.expression} (${word.reading})`
-        : getMeaning(word, config.language);
+        ? getWordLabel(word)
+        : getMeaning(word, config.meaningLanguage);
       return {
         word,
         options,
@@ -82,7 +74,6 @@ export function useWordGameState(config: WordGameConfig) {
 
   const base = useGameStateBase({ questions, checkAnswer, createResult });
 
-  // 기존 반환 형태 유지 — config를 포함
   return {
     ...base,
     config,

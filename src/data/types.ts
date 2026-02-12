@@ -60,25 +60,37 @@ export interface BaseQuestionResult<Q> {
   isCorrect: boolean;
 }
 
-// Word types
-export type JLPTLevel = 'N5' | 'N4' | 'N3' | 'N2' | 'N1';
+// Word types — 일본어/한국어 통합
+export type WordLanguage = 'ja' | 'ko';
 
-export interface Word {
-  expression: string;  // 日本語 (kanji)
-  reading: string;     // ひらがな
-  meaning: string;     // English
-  meaningKo?: string;  // 한국어
+export type WordLevel =
+  | 'JLPT_N5' | 'JLPT_N4' | 'JLPT_N3' | 'JLPT_N2' | 'JLPT_N1'
+  | 'TOPIK_1' | 'TOPIK_2' | 'TOPIK_3' | 'TOPIK_4' | 'TOPIK_5' | 'TOPIK_6';
+
+export interface Meanings {
+  en: string;
+  ko?: string;
+  ja?: string;
 }
 
-export type MeaningLanguage = 'en' | 'ko';
+export interface Word {
+  expression: string;       // 단어 (漢字, 한글 등)
+  reading?: string;         // 읽기 (일본어: ひらがな, 한국어: 불필요)
+  meanings: Meanings;       // 번역 맵
+  lang: WordLanguage;       // 원어
+  level: WordLevel;         // 급수
+}
+
+export type MeaningLanguage = 'en' | 'ko' | 'ja';
 
 export type WordGameMode = 'meaningToWord' | 'wordToMeaning';
 
 export interface WordGameConfig {
-  levels: JLPTLevel[];
+  lang: WordLanguage;
+  levels: WordLevel[];
   gameMode: WordGameMode;
   questionCount: number;
-  language: MeaningLanguage;
+  meaningLanguage: MeaningLanguage;
 }
 
 export interface WordQuestion {
@@ -109,26 +121,6 @@ export interface HangulQuestion {
 
 export type HangulQuestionResult = BaseQuestionResult<HangulQuestion>;
 
-// Korean Word types
-export interface KoreanWord {
-  expression: string;
-  meaning: string;
-  meaningJa?: string;
-}
-
-export interface KoreanWordGameConfig {
-  gameMode: WordGameMode;
-  questionCount: number;
-  language: 'en' | 'ja';
-}
-
-export interface KoreanWordQuestion {
-  word: KoreanWord;
-  options: string[];
-  correctIndex: number;
-}
-
-export type KoreanWordQuestionResult = BaseQuestionResult<KoreanWordQuestion>;
 
 // Syllable Combination Game types
 export interface SyllableGameConfig {

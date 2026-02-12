@@ -2,11 +2,16 @@ import { useState } from 'react';
 import styles from './WordSetupScreen.module.css';
 import ToggleGroup from '../common/ToggleGroup';
 import Button from '../common/Button';
-import { JLPTLevel, WordGameMode, WordGameConfig, MeaningLanguage } from '../../data/types';
-import { getWordCount, availableLevels, comingSoonLevels } from '../../data/words';
+import { WordLevel, WordGameMode, WordGameConfig, MeaningLanguage, WordLanguage } from '../../data/types';
+import {
+  getWordCount,
+  japaneseLevels, japaneseComingSoonLevels,
+  koreanLevels, koreanComingSoonLevels,
+} from '../../data/words';
 import { useLanguage } from '../../i18n';
 
 interface WordSetupScreenProps {
+  lang: WordLanguage;
   onStartGame: (config: WordGameConfig) => void;
 }
 
@@ -17,20 +22,25 @@ const QUESTION_COUNT_OPTIONS = [
   { value: '50', label: '50' },
 ];
 
-export default function WordSetupScreen({ onStartGame }: WordSetupScreenProps) {
+export default function WordSetupScreen({ lang, onStartGame }: WordSetupScreenProps) {
   const { t, language } = useLanguage();
-  const [selectedLevels, setSelectedLevels] = useState<JLPTLevel[]>(['N5']);
-  const [gameMode, setGameMode] = useState<WordGameMode>('meaningToWord');
+
+  const availableLevels = lang === 'ja' ? japaneseLevels : koreanLevels;
+  const comingSoonLevels = lang === 'ja' ? japaneseComingSoonLevels : koreanComingSoonLevels;
+  const levelLabel = lang === 'ja' ? t.jlptLevel : t.topikLevel;
+
+  const [selectedLevels, setSelectedLevels] = useState<WordLevel[]>([availableLevels[0]]);
+  const [gameMode, setGameMode] = useState<WordGameMode>('wordToMeaning');
   const [questionCount, setQuestionCount] = useState<string>('20');
 
   const modeOptions = [
-    { value: 'meaningToWord', label: t.meaningToWord },
     { value: 'wordToMeaning', label: t.wordToMeaning },
+    { value: 'meaningToWord', label: t.meaningToWord },
   ];
 
   const totalWords = selectedLevels.reduce((sum, level) => sum + getWordCount(level), 0);
 
-  const toggleLevel = (level: JLPTLevel) => {
+  const toggleLevel = (level: WordLevel) => {
     if (selectedLevels.includes(level)) {
       if (selectedLevels.length > 1) {
         setSelectedLevels(selectedLevels.filter(l => l !== level));
@@ -40,14 +50,26 @@ export default function WordSetupScreen({ onStartGame }: WordSetupScreenProps) {
     }
   };
 
+  // 레벨 표시 라벨 (JLPT_N5 → N5, TOPIK_1 → 1급)
+  const getLevelDisplayName = (level: WordLevel): string => {
+    if (level.startsWith('JLPT_')) return level.replace('JLPT_', '');
+    return level.replace('TOPIK_', '') + '급';
+  };
+
   const handleStart = () => {
-    // Map UI language to meaning language (Japanese words can't have Japanese meanings)
-    const meaningLang: MeaningLanguage = language === 'ko' ? 'ko' : 'en';
+    // 일본어 → 일본어 뜻 불가, 한국어 → 한국어 뜻 불가
+    let meaningLang: MeaningLanguage;
+    if (lang === 'ja') {
+      meaningLang = language === 'ko' ? 'ko' : 'en';
+    } else {
+      meaningLang = language === 'ja' ? 'ja' : 'en';
+    }
     onStartGame({
+      lang,
       levels: selectedLevels,
       gameMode,
       questionCount: parseInt(questionCount),
-      language: meaningLang,
+      meaningLanguage: meaningLang,
     });
   };
 
@@ -56,7 +78,7 @@ export default function WordSetupScreen({ onStartGame }: WordSetupScreenProps) {
       <h2 className={styles.title}>{t.wordGameSettings}</h2>
 
       <section className={styles.section}>
-        <span className={styles.sectionLabel}>{t.jlptLevel}</span>
+        <span className={styles.sectionLabel}>{levelLabel}</span>
         <div className={styles.levelGrid}>
           {availableLevels.map(level => (
             <button
@@ -64,7 +86,7 @@ export default function WordSetupScreen({ onStartGame }: WordSetupScreenProps) {
               className={`${styles.levelButton} ${selectedLevels.includes(level) ? styles.selected : ''}`}
               onClick={() => toggleLevel(level)}
             >
-              <span className={styles.levelName}>{level}</span>
+              <span className={styles.levelName}>{getLevelDisplayName(level)}</span>
               <span className={styles.wordCount}>{getWordCount(level)} {t.wordsUnit}</span>
             </button>
           ))}
@@ -74,7 +96,7 @@ export default function WordSetupScreen({ onStartGame }: WordSetupScreenProps) {
               className={`${styles.levelButton} ${styles.disabled}`}
               disabled
             >
-              <span className={styles.levelName}>{level}</span>
+              <span className={styles.levelName}>{getLevelDisplayName(level)}</span>
               <span className={styles.comingSoon}>{t.comingSoon}</span>
             </button>
           ))}

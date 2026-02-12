@@ -30,6 +30,7 @@ src/
 │   └── screens/          # 화면 (Home, Setup, Game, Result, Chart, WordSetup, WordGame, WordResult)
 ├── data/
 │   ├── types.ts          # 모든 TypeScript 인터페이스
+│   ├── releaseNotes.ts   # 릴리즈 노트 (ko/en/ja) — README.md와 동기화
 │   ├── hiragana.ts       # 히라가나 데이터
 │   ├── katakana.ts       # 카타카나 데이터
 │   └── words/            # JLPT 단어 (N5, N4, N3)
@@ -165,6 +166,15 @@ CREATE TABLE missed_items (
 ---
 
 ## 코딩 컨벤션
+
+### 릴리즈 노트
+- **단일 소스:** `src/data/releaseNotes.ts`가 릴리즈 노트의 단일 진실 공급원(Single Source of Truth)
+- **동기화 대상:** 버전 업데이트 시 아래 세 곳을 반드시 함께 업데이트:
+  1. `src/data/releaseNotes.ts` — 앱 내 릴리즈 노트 화면 데이터 (ko/en/ja 다국어)
+  2. `README.md` 버전 히스토리 섹션 — ko 기준으로 동기화
+  3. `src/i18n/translations.ts`의 `footerText` — 세 언어 모두 버전 번호 업데이트
+- **다국어:** 각 릴리즈 항목에 `changes: { ko, en, ja }` 세 언어 모두 작성
+- **버전 형식:** `vX.Y` (예: v0.9), 날짜는 `YYYY-MM-DD`
 
 ### Git 커밋
 - **커밋 메시지는 한글로 작성**

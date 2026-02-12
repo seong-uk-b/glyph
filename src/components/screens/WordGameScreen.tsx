@@ -1,7 +1,8 @@
 import { useEffect, useRef } from 'react';
 import styles from './WordGameScreen.module.css';
-import { WordGameConfig, WordQuestionResult, Word, MeaningLanguage } from '../../data/types';
+import { WordGameConfig, WordQuestionResult } from '../../data/types';
 import { useWordGameState } from '../../hooks/useWordGameState';
+import { getMeaning, getWordLabel } from '../../utils/wordUtils';
 import ProgressBar from '../game/ProgressBar';
 import ScoreDisplay from '../game/ScoreDisplay';
 import WordMultipleChoice from '../game/WordMultipleChoice';
@@ -12,13 +13,6 @@ interface WordGameScreenProps {
   config: WordGameConfig;
   onFinish: (results: WordQuestionResult[]) => void;
   onQuit: () => void;
-}
-
-function getMeaning(word: Word, language: MeaningLanguage): string {
-  if (language === 'ko' && word.meaningKo) {
-    return word.meaningKo;
-  }
-  return word.meaning;
 }
 
 export default function WordGameScreen({ config, onFinish, onQuit }: WordGameScreenProps) {
@@ -51,19 +45,26 @@ export default function WordGameScreen({ config, onFinish, onQuit }: WordGameScr
 
   if (!currentQuestion) return null;
 
-  const meaning = getMeaning(currentQuestion.word, config.language);
+  const word = currentQuestion.word;
+  const meaning = getMeaning(word, config.meaningLanguage);
 
   const displayText = config.gameMode === 'meaningToWord'
     ? meaning
-    : `${currentQuestion.word.expression}`;
+    : word.expression;
 
   const displayReading = config.gameMode === 'wordToMeaning'
-    ? currentQuestion.word.reading
+    ? word.reading
     : undefined;
 
   const correctAnswer = config.gameMode === 'meaningToWord'
-    ? `${currentQuestion.word.expression} (${currentQuestion.word.reading})`
+    ? getWordLabel(word)
     : meaning;
+
+  // TTS 언어 결정
+  const speakLang = config.lang; // 'ja' | 'ko'
+  const meaningLang = config.meaningLanguage === 'ko' ? 'ko'
+    : config.meaningLanguage === 'ja' ? 'ja'
+    : 'en';
 
   return (
     <div className={styles.container}>
@@ -85,15 +86,15 @@ export default function WordGameScreen({ config, onFinish, onQuit }: WordGameScr
           <div className={styles.question}>{displayText}</div>
           {config.gameMode === 'wordToMeaning' ? (
             <SpeakButton
-              text={currentQuestion.word.expression}
-              reading={currentQuestion.word.reading}
-              lang="ja"
+              text={word.expression}
+              reading={word.reading}
+              lang={speakLang}
               size="medium"
             />
           ) : (
             <SpeakButton
               text={meaning}
-              lang={config.language === 'ko' ? 'ko' : 'en'}
+              lang={meaningLang}
               size="medium"
             />
           )}
