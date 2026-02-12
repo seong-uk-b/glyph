@@ -10,25 +10,37 @@ export interface ReleaseNote {
 
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 'v1.0',
+    date: '2026-02-12',
+    changes: {
+      ko: [
+        '퀴즈 선택지 카드 UI 개선 (호버 시 떠오르는 효과, 정답/오답 글로우)',
+      ],
+      en: [
+        'Quiz option card UI redesign (hover lift effect, correct/wrong glow)',
+      ],
+      ja: [
+        'クイズ選択肢カードUIを改善（ホバー時の浮き上がりエフェクト、正解/不正解グロー）',
+      ],
+    },
+  },
+  {
     version: 'v0.9',
     date: '2026-02-12',
     changes: {
       ko: [
-        '단어 데이터 포맷 통합 (일본어/한국어 공통)',
         '한국어 단어 305개로 대폭 확장 (65 → 305)',
         '신체, 교통, 감정, 부사, 인사 등 신규 카테고리 추가',
         '릴리즈 노트 화면 추가 (다국어 전환 지원)',
         '푸터에 제작자 정보 및 문서 링크 추가',
       ],
       en: [
-        'Unified word data format (Japanese/Korean)',
         'Expanded Korean vocabulary to 305 words (65 → 305)',
         'New categories: body, transport, emotions, adverbs, greetings',
         'Added release notes screen (with language toggle)',
         'Added author credit and docs link in footer',
       ],
       ja: [
-        '単語データフォーマット統合（日本語/韓国語共通）',
         '韓国語単語を305語に大幅拡張（65 → 305）',
         '身体、交通、感情、副詞、挨拶など新カテゴリ追加',
         'リリースノート画面を追加（多言語切り替え対応）',
@@ -123,24 +135,21 @@ export const releaseNotes: ReleaseNote[] = [
     changes: {
       ko: [
         '홈 화면 카테고리 그룹화 (문자표 / 게임 섹션 분리)',
-        '단어 게임 언어 설정을 앱 다국어 설정(i18n)과 자동 연동',
+        '단어 게임 언어가 앱 언어와 자동 연동',
         '게임 중 언어 전환 비활성화',
         '헤더 로고 클릭 시 홈 화면 이동',
-        '헤더 레이아웃 grid 기반으로 변경 (로고 항상 정중앙)',
       ],
       en: [
         'Home screen category grouping (chart / game sections)',
-        'Word game language auto-synced with app i18n setting',
+        'Word game language auto-synced with app language',
         'Language switch disabled during game',
         'Navigate to home by clicking header logo',
-        'Grid-based header layout (logo always centered)',
       ],
       ja: [
         'ホーム画面カテゴリグループ化（文字表 / ゲームセクション分離）',
-        '単語ゲーム言語設定をアプリ多言語設定（i18n）と自動連動',
+        '単語ゲーム言語がアプリ言語と自動連動',
         'ゲーム中の言語切り替えを無効化',
         'ヘッダーロゴクリックでホーム画面へ移動',
-        'グリッドベースのヘッダーレイアウト（ロゴ常に中央）',
       ],
     },
   },
@@ -148,21 +157,9 @@ export const releaseNotes: ReleaseNote[] = [
     version: 'v0.4',
     date: '2026-02-10',
     changes: {
-      ko: [
-        '게임 훅 통합: useGameStateBase 제네릭 공통 훅 생성',
-        'useGameState(가나)와 useWordGameState(단어)의 중복 코드 제거',
-        '새 게임 모드 추가 시 문제 생성 로직만 작성하면 되도록 구조 개선',
-      ],
-      en: [
-        'Unified game hook: created generic useGameStateBase',
-        'Removed duplicate code between useGameState (kana) and useWordGameState (word)',
-        'Streamlined structure: only question generation logic needed for new game modes',
-      ],
-      ja: [
-        'ゲームフック統合: useGameStateBaseジェネリック共通フック作成',
-        'useGameState（かな）とuseWordGameState（単語）の重複コード削除',
-        '新ゲームモード追加時、問題生成ロジックのみ記述すればよい構造に改善',
-      ],
+      ko: ['내부 코드 개선'],
+      en: ['Internal code improvements'],
+      ja: ['内部コード改善'],
     },
   },
   {
@@ -171,18 +168,15 @@ export const releaseNotes: ReleaseNote[] = [
     changes: {
       ko: [
         '한국어 / 영어 UI 전환 기능 추가',
-        '자체 Context 기반 i18n 시스템 (LanguageProvider + useLanguage)',
-        '언어 설정 localStorage 저장',
+        '언어 설정 자동 기억',
       ],
       en: [
         'Korean / English UI switching',
-        'Custom Context-based i18n system (LanguageProvider + useLanguage)',
-        'Language preference saved to localStorage',
+        'Language preference remembered automatically',
       ],
       ja: [
         '韓国語/英語UI切り替え機能を追加',
-        '独自Context基盤i18nシステム（LanguageProvider + useLanguage）',
-        '言語設定をlocalStorageに保存',
+        '言語設定を自動記憶',
       ],
     },
   },

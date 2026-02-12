@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import styles from './FeedbackOverlay.module.css';
 import { FeedbackState } from '../../data/types';
 import { useLanguage } from '../../i18n';
+import { playCorrectSound, playWrongSound } from '../../utils/sound';
 
 interface FeedbackOverlayProps {
   state: FeedbackState;
@@ -11,6 +12,11 @@ interface FeedbackOverlayProps {
 
 export default function FeedbackOverlay({ state, correctAnswer, onComplete }: FeedbackOverlayProps) {
   const { t } = useLanguage();
+
+  useEffect(() => {
+    if (state === 'correct') playCorrectSound();
+    if (state === 'wrong') playWrongSound();
+  }, [state]);
 
   useEffect(() => {
     if (state === 'idle') return;

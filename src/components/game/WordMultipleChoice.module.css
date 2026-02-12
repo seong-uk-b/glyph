@@ -15,14 +15,17 @@
   border: 1px solid var(--border-primary);
   border-radius: var(--radius-md);
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 0.15s ease, transform 0.2s ease;
   outline: none;
   text-align: left;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .option:hover:not(:disabled) {
   background: var(--bg-hover);
   border-color: var(--text-secondary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .option:focus-visible {
@@ -52,6 +55,8 @@
 .correct {
   background: rgba(152, 195, 121, 0.15);
   border-color: var(--accent-green);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(152, 195, 121, 0.3);
 }
 
 .correct .optionText {
@@ -62,6 +67,7 @@
   background: rgba(224, 108, 117, 0.15);
   border-color: var(--accent-red);
   animation: shake 0.4s ease;
+  box-shadow: 0 2px 8px rgba(224, 108, 117, 0.3);
 }
 
 .wrong .optionText {
