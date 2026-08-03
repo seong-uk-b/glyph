@@ -1,0 +1,54 @@
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.875rem 1rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+
+.row:hover {
+  border-color: var(--accent-blue);
+}
+
+.label {
+  font-size: 0.9375rem;
+  color: var(--text-bright);
+}
+
+.track {
+  position: relative;
+  flex-shrink: 0;
+  width: 42px;
+  height: 24px;
+  border-radius: 999px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-subtle);
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.on {
+  background: rgba(97, 175, 239, 0.25);
+  border-color: var(--accent-blue);
+}
+
+.knob {
+  position: absolute;
+  top: 50%;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--text-secondary);
+  transform: translateY(-50%);
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.on .knob {
+  background: var(--accent-blue);
+  transform: translate(18px, -50%);
+}

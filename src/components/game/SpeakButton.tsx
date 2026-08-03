@@ -1,13 +1,12 @@
 import { useState, useCallback } from 'react';
-import { speak } from '../../utils/speech';
-import { tryPlayWordAudio } from '../../utils/wordAudio';
+import { playWord } from '../../utils/wordAudio';
 import styles from './SpeakButton.module.css';
 
 interface SpeakButtonProps {
   text: string;
   reading?: string;
   lang?: 'ja' | 'ko' | 'en';
-  size?: 'small' | 'medium' | 'large';
+  size?: 'small' | 'medium' | 'large' | 'xlarge';
 }
 
 export default function SpeakButton({ text, reading, lang = 'ja', size = 'medium' }: SpeakButtonProps) {
@@ -16,24 +15,15 @@ export default function SpeakButton({ text, reading, lang = 'ja', size = 'medium
   const handleClick = useCallback(() => {
     setIsPlaying(true);
 
-    const fallback = () => {
-      speak(text, lang, reading);
-      const duration = Math.max(500, (reading || text).length * 200);
-      setTimeout(() => setIsPlaying(false), duration);
-    };
-
-    // 일본어/한국어 단어는 사전 생성 mp3 우선, 없으면 Web Speech API 폴백
-    if (lang === 'ja' || lang === 'ko') {
-      tryPlayWordAudio(text, reading ?? '', lang).then(audio => {
-        if (audio) {
-          audio.onended = () => setIsPlaying(false);
-        } else {
-          fallback();
-        }
-      });
-    } else {
-      fallback();
-    }
+    playWord(text, reading, lang).then(audio => {
+      if (audio) {
+        audio.onended = () => setIsPlaying(false);
+      } else {
+        // TTS 폴백은 종료 시점을 알 수 없어 길이 기반으로 추정
+        const duration = Math.max(500, (reading || text).length * 200);
+        setTimeout(() => setIsPlaying(false), duration);
+      }
+    });
   }, [text, reading, lang]);
 
   return (

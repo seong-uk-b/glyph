@@ -108,6 +108,31 @@
   font-size: 1rem;
 }
 
+/* 학습 통계 (연속 학습일 / 오늘 기록) */
+.studyStats {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.streakChip {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--accent-yellow);
+  background: rgba(229, 192, 123, 0.1);
+  border: 1px solid rgba(229, 192, 123, 0.25);
+  padding: 0.25rem 0.625rem;
+  border-radius: var(--radius-sm);
+}
+
+.todayStat {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+}
+
 /* Sections */
 .section {
   margin-top: 1.5rem;
@@ -198,6 +223,18 @@
 .categoryArrow {
   font-size: 1.25rem;
   color: var(--accent-blue);
+  flex-shrink: 0;
+}
+
+/* 복습 카드의 오답 개수 배지 */
+.reviewBadge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--accent-red);
+  background: rgba(224, 108, 117, 0.12);
+  font-family: var(--font-mono);
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm);
   flex-shrink: 0;
 }
 

@@ -1,5 +1,12 @@
+import { useMemo } from 'react';
 import styles from './HomeScreen.module.css';
+import { WordGameConfig } from '../../data/types';
+import { japaneseLevels, koreanLevels } from '../../data/words';
+import { getMissedWords, getStudySummary } from '../../utils/studyStorage';
+import { deriveMeaningLanguage } from '../../utils/wordUtils';
 import { useLanguage } from '../../i18n';
+
+const REVIEW_QUESTION_COUNT = 10;
 
 interface HomeScreenProps {
   onStart: () => void;
@@ -9,15 +16,37 @@ interface HomeScreenProps {
   onSyllable: () => void;
   onWords: () => void;
   onKoreanWords: () => void;
+  onReview: (config: WordGameConfig) => void;
 }
 
-export default function HomeScreen({ onStart, onChart, onHangulChart, onHangulStart, onSyllable, onWords, onKoreanWords }: HomeScreenProps) {
+export default function HomeScreen({ onStart, onChart, onHangulChart, onHangulStart, onSyllable, onWords, onKoreanWords, onReview }: HomeScreenProps) {
   const { t, language, setLanguage, learnLanguage, setLearnLanguage } = useLanguage();
+
+  const wordLang = learnLanguage === 'japanese' ? 'ja' : 'ko';
+
+  // 홈 화면은 이동할 때마다 다시 마운트되므로 마운트 시점 값이면 충분
+  const { streak, today: todayStats } = useMemo(() => getStudySummary(), []);
+  const missedWords = useMemo(() => getMissedWords(wordLang), [wordLang]);
+  const missedCount = missedWords.length;
 
   const selectLearnLanguage = (lang: 'japanese' | 'korean') => {
     setLearnLanguage(lang);
     if (lang === 'japanese' && language === 'ja') setLanguage('ko');
     if (lang === 'korean' && language === 'ko') setLanguage('ja');
+  };
+
+  const startReview = () => {
+    if (missedCount === 0) return;
+
+    onReview({
+      lang: wordLang,
+      // levels는 오답 선택지(distractor) 풀로만 쓰인다 — 출제는 customWords에서
+      levels: wordLang === 'ja' ? japaneseLevels : koreanLevels,
+      gameMode: 'wordToMeaning',
+      questionCount: Math.min(REVIEW_QUESTION_COUNT, missedCount),
+      meaningLanguage: deriveMeaningLanguage(wordLang, language),
+      customWords: missedWords,
+    });
   };
 
   return (
@@ -30,6 +59,19 @@ export default function HomeScreen({ onStart, onChart, onHangulChart, onHangulSt
         <p className={styles.subtitle}>
           {t.homeSubtitle}
         </p>
+        {(streak > 0 || todayStats.total > 0) && (
+          <div className={styles.studyStats}>
+            {streak > 0 && (
+              <span className={styles.streakChip}>🔥 {streak}{t.studyStreak}</span>
+            )}
+            {/* 오늘 정답/전체 — 전용 번역 키가 없어 기호로만 표기 */}
+            {todayStats.total > 0 && (
+              <span className={styles.todayStat}>
+                ✓ {todayStats.correct}/{todayStats.total}
+              </span>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Language Selection */}
@@ -142,6 +184,26 @@ export default function HomeScreen({ onStart, onChart, onHangulChart, onHangulSt
               </button>
             </>
           )}
+
+          <button
+            className={`${styles.categoryCard} ${missedCount === 0 ? styles.disabled : ''}`}
+            onClick={startReview}
+            disabled={missedCount === 0}
+          >
+            <span className={styles.categoryChar}>{'\u5FA9'}</span>
+            <div className={styles.categoryInfo}>
+              <span className={styles.categoryName}>{t.review}</span>
+              <span className={styles.categoryDesc}>
+                {missedCount > 0 ? t.reviewDesc : t.noReviewWords}
+              </span>
+            </div>
+            {missedCount > 0 && (
+              <>
+                <span className={styles.reviewBadge}>{missedCount}</span>
+                <span className={styles.categoryArrow}>&rarr;</span>
+              </>
+            )}
+          </button>
         </div>
       </section>
     </div>

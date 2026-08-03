@@ -15,22 +15,28 @@ import { useGameStateBase } from './useGameStateBase';
 function generateWordOptions(
   correctWord: Word,
   allWords: Word[],
-  mode: 'meaningToWord' | 'wordToMeaning',
+  mode: WordGameConfig['gameMode'],
   language: MeaningLanguage,
   count: number = 4
 ): string[] {
+  // listening 모드는 발음을 듣고 뜻을 고르므로 wordToMeaning과 동일한 선택지 구성
   const correctAnswer = mode === 'meaningToWord'
     ? getWordLabel(correctWord)
     : getMeaning(correctWord, language);
+  const toOption = (w: Word) =>
+    mode === 'meaningToWord' ? getWordLabel(w) : getMeaning(w, language);
 
-  const otherWords = allWords.filter(w => w.expression !== correctWord.expression);
-  const shuffledOthers = shuffle(otherWords).slice(0, count - 1);
-
-  const wrongOptions = shuffledOthers.map(w =>
-    mode === 'meaningToWord'
-      ? getWordLabel(w)
-      : getMeaning(w, language)
-  );
+  // 풀 전체를 복사·셔플하는 대신 랜덤 인덱스로 추출 — 풀이 수천 개여도 문제당 O(1)
+  const used = new Set<string>([correctAnswer]);
+  const wrongOptions: string[] = [];
+  for (let attempts = 0; wrongOptions.length < count - 1 && attempts < 60; attempts++) {
+    const candidate = allWords[Math.floor(Math.random() * allWords.length)];
+    if (!candidate || candidate.expression === correctWord.expression) continue;
+    const option = toOption(candidate);
+    if (used.has(option)) continue;
+    used.add(option);
+    wrongOptions.push(option);
+  }
 
   return shuffle([correctAnswer, ...wrongOptions]);
 }
@@ -38,12 +44,15 @@ function generateWordOptions(
 export function useWordGameState(config: WordGameConfig) {
   // 문제 생성 — 단어 게임 고유 로직
   const questions = useMemo<WordQuestion[]>(() => {
-    const allWords = getWordsByLevels(config.levels);
-    const shuffled = shuffle(allWords);
+    const levelWords = getWordsByLevels(config.levels);
+    // customWords 지정 시(오답 복습) 해당 목록에서 출제, 오답 선택지는 넓은 풀에서 생성
+    const questionPool = config.customWords?.length ? config.customWords : levelWords;
+    const distractorPool = levelWords.length ? levelWords : questionPool;
+    const shuffled = shuffle(questionPool);
     const selected = shuffled.slice(0, config.questionCount);
 
     return selected.map(word => {
-      const options = generateWordOptions(word, allWords, config.gameMode, config.meaningLanguage);
+      const options = generateWordOptions(word, distractorPool, config.gameMode, config.meaningLanguage);
       const correctAnswer = config.gameMode === 'meaningToWord'
         ? getWordLabel(word)
         : getMeaning(word, config.meaningLanguage);

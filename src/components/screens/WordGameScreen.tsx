@@ -3,6 +3,8 @@ import styles from './WordGameScreen.module.css';
 import { WordGameConfig, WordQuestionResult } from '../../data/types';
 import { useWordGameState } from '../../hooks/useWordGameState';
 import { getMeaning, getWordLabel } from '../../utils/wordUtils';
+import { stopSpeaking } from '../../utils/speech';
+import { playWord } from '../../utils/wordAudio';
 import { useLanguage } from '../../i18n';
 import ProgressBar from '../game/ProgressBar';
 import ScoreDisplay from '../game/ScoreDisplay';
@@ -50,6 +52,35 @@ export default function WordGameScreen({ config, onFinish, onQuit }: WordGameScr
     }
   }, [isFinished, results, onFinish]);
 
+  const isListening = config.gameMode === 'listening';
+  // meaningToWord는 발음이 곧 정답이므로 자동 재생 대상에서 제외
+  const shouldAutoPlay = isListening || (config.autoPlay && config.gameMode === 'wordToMeaning');
+
+  useEffect(() => {
+    if (!shouldAutoPlay || !currentQuestion) return;
+
+    const { expression, reading } = currentQuestion.word;
+    let cancelled = false;
+    let playing: HTMLAudioElement | null = null;
+    let usedTts = false;
+
+    playWord(expression, reading, config.lang).then(audio => {
+      usedTts = !audio;
+      if (cancelled) {
+        audio?.pause();
+        if (usedTts) stopSpeaking();
+        return;
+      }
+      playing = audio;
+    });
+
+    return () => {
+      cancelled = true;
+      if (playing) playing.pause();
+      if (usedTts) stopSpeaking();
+    };
+  }, [currentQuestion, shouldAutoPlay, config.lang]);
+
   if (!currentQuestion) return null;
 
   const word = currentQuestion.word;
@@ -89,39 +120,59 @@ export default function WordGameScreen({ config, onFinish, onQuit }: WordGameScr
       </div>
 
       <div className={styles.questionArea}>
-        <div className={styles.questionBlock}>
-          <div className={styles.questionLine}>
-            <div className={styles.question}>{displayText}</div>
-            <div className={styles.speakWrap}>
-              {config.gameMode === 'wordToMeaning' ? (
-                <SpeakButton
-                  text={word.expression}
-                  reading={word.reading}
-                  lang={speakLang}
-                  size="medium"
-                />
-              ) : (
-                <SpeakButton
-                  text={meaning}
-                  lang={meaningLang}
-                  size="medium"
-                />
-              )}
-            </div>
+        {isListening ? (
+          <div className={styles.questionBlock}>
+            <div className={styles.listenPrompt}>{t.listenPrompt}</div>
+            <SpeakButton
+              text={word.expression}
+              reading={word.reading}
+              lang={speakLang}
+              size="xlarge"
+            />
+            <div className={styles.replayLabel}>{t.replay}</div>
+            {/* 답한 뒤에만 표기를 공개해 문자 형태까지 학습하도록 함 */}
+            {feedbackState !== 'idle' && (
+              <div className={styles.revealBlock}>
+                <div className={styles.question}>{word.expression}</div>
+                {word.reading && <div className={styles.reading}>{word.reading}</div>}
+              </div>
+            )}
           </div>
-          {displayReading && (
-            showReading ? (
-              <div className={styles.reading}>{displayReading}</div>
-            ) : (
-              <button
-                className={styles.readingToggle}
-                onClick={() => setShowReading(true)}
-              >
-                {t.showFurigana}
-              </button>
-            )
-          )}
-        </div>
+        ) : (
+          <div className={styles.questionBlock}>
+            <div className={styles.questionLine}>
+              <div className={styles.question}>{displayText}</div>
+              <div className={styles.speakWrap}>
+                {config.gameMode === 'wordToMeaning' ? (
+                  <SpeakButton
+                    text={word.expression}
+                    reading={word.reading}
+                    lang={speakLang}
+                    size="medium"
+                  />
+                ) : (
+                  <SpeakButton
+                    text={meaning}
+                    lang={meaningLang}
+                    size="medium"
+                  />
+                )}
+              </div>
+            </div>
+            {displayReading && (
+              showReading ? (
+                <div className={styles.reading}>{displayReading}</div>
+              ) : (
+                <button
+                  className={styles.readingToggle}
+                  onClick={() => setShowReading(true)}
+                >
+                  {t.showFurigana}
+                </button>
+              )
+            )}
+          </div>
+        )}
       </div>
 
       <div className={styles.inputArea}>

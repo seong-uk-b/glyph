@@ -66,6 +66,28 @@
   border-color: var(--accent-blue);
 }
 
+/* 듣기 모드 */
+.listenPrompt {
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+  word-break: keep-all;
+}
+
+.replayLabel {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+}
+
+.revealBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  margin-top: 0.75rem;
+  animation: fadeIn 0.2s ease;
+}
+
 .inputArea {
   margin-top: 1rem;
 }

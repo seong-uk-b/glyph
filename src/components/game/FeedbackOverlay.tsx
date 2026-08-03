@@ -3,6 +3,7 @@ import styles from './FeedbackOverlay.module.css';
 import { FeedbackState } from '../../data/types';
 import { useLanguage } from '../../i18n';
 import { playCorrectSound, playWrongSound } from '../../utils/sound';
+import { hapticCorrect, hapticWrong } from '../../utils/haptics';
 
 interface FeedbackOverlayProps {
   state: FeedbackState;
@@ -14,8 +15,14 @@ export default function FeedbackOverlay({ state, correctAnswer, onComplete }: Fe
   const { t } = useLanguage();
 
   useEffect(() => {
-    if (state === 'correct') playCorrectSound();
-    if (state === 'wrong') playWrongSound();
+    if (state === 'correct') {
+      playCorrectSound();
+      hapticCorrect();
+    }
+    if (state === 'wrong') {
+      playWrongSound();
+      hapticWrong();
+    }
   }, [state]);
 
   useEffect(() => {

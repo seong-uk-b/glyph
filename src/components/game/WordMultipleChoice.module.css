@@ -11,6 +11,8 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.875rem 1rem;
+  /* 모바일 터치 영역 확보 */
+  min-height: var(--tap-target-min);
   background: var(--bg-tertiary);
   border: 1px solid var(--border-primary);
   border-radius: var(--radius-md);

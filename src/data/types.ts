@@ -83,7 +83,7 @@ export interface Word {
 
 export type MeaningLanguage = 'en' | 'ko' | 'ja';
 
-export type WordGameMode = 'meaningToWord' | 'wordToMeaning';
+export type WordGameMode = 'meaningToWord' | 'wordToMeaning' | 'listening';
 
 export interface WordGameConfig {
   lang: WordLanguage;
@@ -91,6 +91,8 @@ export interface WordGameConfig {
   gameMode: WordGameMode;
   questionCount: number;
   meaningLanguage: MeaningLanguage;
+  autoPlay?: boolean;       // 문제 표시 시 발음 자동 재생 (listening 모드는 항상 자동)
+  customWords?: Word[];     // 지정 시 레벨 대신 이 목록에서 출제 (오답 복습용)
 }
 
 export interface WordQuestion {

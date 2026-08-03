@@ -20,6 +20,7 @@ export default function WordResultScreen({
   onHome,
 }: WordResultScreenProps) {
   const { t } = useLanguage();
+
   const correct = results.filter(r => r.isCorrect).length;
   const total = results.length;
   const accuracy = total > 0 ? Math.round((correct / total) * 100) : 0;

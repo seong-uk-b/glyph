@@ -1,5 +1,7 @@
-// 사전 생성된 단어 발음 mp3 재생 (없으면 Web Speech API 폴백은 호출부에서 처리)
-// 파일명 해시는 scripts/generate-tts.mjs의 fnv1a와 반드시 동일해야 함
+// 사전 생성된 단어 발음 mp3 재생 + Web Speech API 폴백
+// 파일명 해시는 scripts/pipeline/generate-tts.mjs의 fnv1a와 반드시 동일해야 함
+
+import { speak } from './speech';
 
 export function fnv1a(str: string): string {
   let hash = 0x811c9dc5;
@@ -16,6 +18,26 @@ export function wordAudioId(expression: string, reading: string): string {
 
 // 존재하지 않는 파일에 대한 반복 요청 방지
 const missing = new Set<string>();
+
+/**
+ * 단어 발음 재생 — 사전 생성 mp3 우선, 없으면 Web Speech API 폴백.
+ * mp3가 재생되면 HTMLAudioElement를, TTS 폴백이면 null을 반환한다.
+ * (SpeakButton과 자동 재생이 공유하는 단일 재생 경로)
+ */
+export function playWord(
+  text: string,
+  reading: string | undefined,
+  lang: 'ja' | 'ko' | 'en',
+): Promise<HTMLAudioElement | null> {
+  if (lang === 'en') {
+    speak(text, lang, reading);
+    return Promise.resolve(null);
+  }
+  return tryPlayWordAudio(text, reading ?? '', lang).then(audio => {
+    if (!audio) speak(text, lang, reading);
+    return audio;
+  });
+}
 
 /**
  * 사전 생성 mp3 재생을 시도한다.

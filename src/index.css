@@ -1,6 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Noto+Sans+JP:wght@400;500;700&display=swap');
 
 :root {
+  /* 모바일 터치 타겟 최소 높이 (Apple HIG 44pt + 여유) */
+  --tap-target-min: 48px;
+
   --bg-primary: #1e2127;
   --bg-secondary: #282c34;
   --bg-tertiary: #2c313a;
@@ -67,4 +70,32 @@ body {
 
 input, button {
   font-family: inherit;
+}
+
+/* 모바일 WebView 최적화 */
+* {
+  /* 탭 시 회색 하이라이트 제거 */
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  /* 스크롤 끝에서 튕기는 러버밴드 효과 방지 */
+  overscroll-behavior: none;
+}
+
+body {
+  /* 길게 눌러 텍스트 선택되는 것 방지 */
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+input, textarea {
+  /* 입력 필드는 텍스트 선택 허용 */
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+button {
+  /* 더블탭 확대로 인한 클릭 지연 제거 */
+  touch-action: manipulation;
 }

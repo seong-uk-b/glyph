@@ -20,6 +20,7 @@ import SyllableSetupScreen from './components/screens/SyllableSetupScreen';
 import SyllableGameScreen from './components/screens/SyllableGameScreen';
 import SyllableResultScreen from './components/screens/SyllableResultScreen';
 import ReleaseNotesScreen from './components/screens/ReleaseNotesScreen';
+import { recordSession, recordMissedWords } from './utils/studyStorage';
 import {
   GameConfig, QuestionResult,
   WordGameConfig, WordQuestionResult,
@@ -64,6 +65,7 @@ function App() {
   }, []);
 
   const finishGame = useCallback((results: QuestionResult[]) => {
+    recordSession(results);
     setLastResults(results);
     setCurrentScreen('result');
   }, []);
@@ -79,6 +81,9 @@ function App() {
   }, []);
 
   const finishWordGame = useCallback((results: WordQuestionResult[]) => {
+    // 게임 완료 이벤트에서 한 번만 기록 (통계는 전 게임 공통, 오답 노트는 단어 게임 전용)
+    recordSession(results);
+    recordMissedWords(results);
     setWordLastResults(results);
     const lang = results[0]?.question.word.lang;
     setCurrentScreen(lang === 'ko' ? 'koreanWordResult' : 'wordResult');
@@ -97,6 +102,7 @@ function App() {
   }, []);
 
   const finishHangulGame = useCallback((results: HangulQuestionResult[]) => {
+    recordSession(results);
     setHangulLastResults(results);
     setCurrentScreen('hangulResult');
   }, []);
@@ -112,6 +118,7 @@ function App() {
   }, []);
 
   const finishSyllableGame = useCallback((results: SyllableQuestionResult[]) => {
+    recordSession(results);
     setSyllableLastResults(results);
     setCurrentScreen('syllableResult');
   }, []);
@@ -158,6 +165,7 @@ function App() {
             onSyllable={goSyllableSetup}
             onWords={goWordSetup}
             onKoreanWords={goKoreanWordSetup}
+            onReview={startWordGame}
           />
         )}
         {currentScreen === 'releaseNotes' && <ReleaseNotesScreen />}

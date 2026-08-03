@@ -61,7 +61,17 @@ export interface Translations {
   topikLevel: string;
   meaningToWord: string;
   wordToMeaning: string;
+  listening: string;
+  listenPrompt: string;
+  replay: string;
+  autoPlaySound: string;
   showFurigana: string;
+
+  // Review & Stats
+  review: string;
+  reviewDesc: string;
+  noReviewWords: string;
+  studyStreak: string;
   language: string;
   english: string;
   korean: string;
@@ -169,7 +179,17 @@ const en: Translations = {
   topikLevel: 'TOPIK Level',
   meaningToWord: 'Meaning → Word',
   wordToMeaning: 'Word → Meaning',
+  listening: 'Listening',
+  listenPrompt: 'Listen and choose the correct meaning',
+  replay: 'Replay',
+  autoPlaySound: 'Auto-play pronunciation',
   showFurigana: 'Show reading',
+
+  // Review & Stats
+  review: 'Review',
+  reviewDesc: 'Practice missed words',
+  noReviewWords: 'No words to review yet',
+  studyStreak: 'day streak',
   language: 'Language',
   english: 'English',
   korean: '한국어',
@@ -277,7 +297,17 @@ const ko: Translations = {
   topikLevel: 'TOPIK 레벨',
   meaningToWord: '뜻 → 단어',
   wordToMeaning: '단어 → 뜻',
+  listening: '듣기',
+  listenPrompt: '발음을 듣고 알맞은 뜻을 고르세요',
+  replay: '다시 듣기',
+  autoPlaySound: '발음 자동 재생',
   showFurigana: '발음 보기',
+
+  // Review & Stats
+  review: '복습',
+  reviewDesc: '틀린 단어 다시 풀기',
+  noReviewWords: '아직 복습할 단어가 없어요',
+  studyStreak: '일 연속 학습',
   language: '언어',
   english: 'English',
   korean: '한국어',
@@ -385,7 +415,17 @@ const ja: Translations = {
   topikLevel: 'TOPIKレベル',
   meaningToWord: '意味 → 単語',
   wordToMeaning: '単語 → 意味',
+  listening: 'リスニング',
+  listenPrompt: '発音を聞いて正しい意味を選んでください',
+  replay: 'もう一度聞く',
+  autoPlaySound: '発音の自動再生',
   showFurigana: 'ふりがな表示',
+
+  // Review & Stats
+  review: '復習',
+  reviewDesc: '間違えた単語をもう一度',
+  noReviewWords: '復習する単語はまだありません',
+  studyStreak: '日連続学習',
   language: '言語',
   english: 'English',
   korean: '한국어',

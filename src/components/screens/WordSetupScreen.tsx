@@ -2,7 +2,9 @@ import { useState } from 'react';
 import styles from './WordSetupScreen.module.css';
 import ToggleGroup from '../common/ToggleGroup';
 import Button from '../common/Button';
-import { WordLevel, WordGameMode, WordGameConfig, MeaningLanguage, WordLanguage } from '../../data/types';
+import Switch from '../common/Switch';
+import { WordLevel, WordGameMode, WordGameConfig, WordLanguage } from '../../data/types';
+import { deriveMeaningLanguage } from '../../utils/wordUtils';
 import {
   getWordCount,
   japaneseLevels, japaneseComingSoonLevels,
@@ -32,10 +34,12 @@ export default function WordSetupScreen({ lang, onStartGame }: WordSetupScreenPr
   const [selectedLevels, setSelectedLevels] = useState<WordLevel[]>([availableLevels[0]]);
   const [gameMode, setGameMode] = useState<WordGameMode>('wordToMeaning');
   const [questionCount, setQuestionCount] = useState<string>('20');
+  const [autoPlay, setAutoPlay] = useState(false);
 
   const modeOptions = [
     { value: 'wordToMeaning', label: t.wordToMeaning },
     { value: 'meaningToWord', label: t.meaningToWord },
+    { value: 'listening', label: t.listening },
   ];
 
   const totalWords = selectedLevels.reduce((sum, level) => sum + getWordCount(level), 0);
@@ -57,19 +61,13 @@ export default function WordSetupScreen({ lang, onStartGame }: WordSetupScreenPr
   };
 
   const handleStart = () => {
-    // 일본어 → 일본어 뜻 불가, 한국어 → 한국어 뜻 불가
-    let meaningLang: MeaningLanguage;
-    if (lang === 'ja') {
-      meaningLang = language === 'ko' ? 'ko' : 'en';
-    } else {
-      meaningLang = language === 'ja' ? 'ja' : 'en';
-    }
     onStartGame({
       lang,
       levels: selectedLevels,
       gameMode,
       questionCount: parseInt(questionCount),
-      meaningLanguage: meaningLang,
+      meaningLanguage: deriveMeaningLanguage(lang, language),
+      autoPlay,
     });
   };
 
@@ -111,6 +109,13 @@ export default function WordSetupScreen({ lang, onStartGame }: WordSetupScreenPr
           onChange={(v) => setGameMode(v as WordGameMode)}
         />
       </section>
+
+      {/* 듣기 모드는 항상 자동 재생이므로 옵션을 숨긴다 */}
+      {gameMode !== 'listening' && (
+        <section className={styles.section}>
+          <Switch label={t.autoPlaySound} checked={autoPlay} onChange={setAutoPlay} />
+        </section>
+      )}
 
       <section className={styles.section}>
         <ToggleGroup
