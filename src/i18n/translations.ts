@@ -112,7 +112,7 @@ const en: Translations = {
   // Header & Footer
   appTitle: 'Glyph',
   back: '← Back',
-  footerText: 'Glyph v1.0',
+  footerText: 'Glyph v1.1',
   madeBy: 'Made by',
 
   // Home Screen
@@ -220,7 +220,7 @@ const ko: Translations = {
   // Header & Footer
   appTitle: '글리프',
   back: '← 뒤로',
-  footerText: '글리프 v1.0',
+  footerText: '글리프 v1.1',
   madeBy: 'Made by',
 
   // Home Screen
@@ -328,7 +328,7 @@ const ja: Translations = {
   // Header & Footer
   appTitle: 'グリフ',
   back: '← 戻る',
-  footerText: 'グリフ v1.0',
+  footerText: 'グリフ v1.1',
   madeBy: 'Made by',
 
   // Home Screen

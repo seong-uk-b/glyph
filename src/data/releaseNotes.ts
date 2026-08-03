@@ -10,6 +10,33 @@ export interface ReleaseNote {
 
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 'v1.1',
+    date: '2026-08-03',
+    changes: {
+      ko: [
+        'iOS 앱 지원 (Capacitor) — 아이폰에 네이티브 앱으로 설치 가능',
+        '아이폰 노치/세이프 에어리어 대응 (상단 언어 토글 겹침 해결)',
+        '단어 퀴즈 레이아웃 개선 (단어 가운데 정렬, 발음 버튼 옆 배치)',
+        '후리가나 기본 숨김 — "발음 보기" 버튼으로 확인하는 방식으로 변경',
+        '단어 데이터 오류 106건 수정 (3,524단어 전수 검수: 한자/후리가나/뜻)',
+      ],
+      en: [
+        'iOS app support (Capacitor) — installable as a native iPhone app',
+        'iPhone notch/safe-area support (fixed top language toggle overlap)',
+        'Word quiz layout improvement (centered word, speak button beside it)',
+        'Furigana hidden by default — revealed via "Show reading" button',
+        'Fixed 106 word data errors (full audit of 3,524 words: kanji/furigana/meanings)',
+      ],
+      ja: [
+        'iOSアプリ対応（Capacitor）— iPhoneにネイティブアプリとしてインストール可能',
+        'iPhoneノッチ/セーフエリア対応（上部言語トグルの重なりを解消）',
+        '単語クイズレイアウト改善（単語を中央揃え、発音ボタンを横に配置）',
+        'ふりがなをデフォルト非表示に —「ふりがな表示」ボタンで確認する方式に変更',
+        '単語データの誤り106件を修正（3,524語全数検収: 漢字/ふりがな/意味）',
+      ],
+    },
+  },
+  {
     version: 'v1.0',
     date: '2026-02-12',
     changes: {
