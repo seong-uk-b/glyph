@@ -1,8 +1,9 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styles from './WordGameScreen.module.css';
 import { WordGameConfig, WordQuestionResult } from '../../data/types';
 import { useWordGameState } from '../../hooks/useWordGameState';
 import { getMeaning, getWordLabel } from '../../utils/wordUtils';
+import { useLanguage } from '../../i18n';
 import ProgressBar from '../game/ProgressBar';
 import ScoreDisplay from '../game/ScoreDisplay';
 import WordMultipleChoice from '../game/WordMultipleChoice';
@@ -30,7 +31,13 @@ export default function WordGameScreen({ config, onFinish, onQuit }: WordGameScr
     nextQuestion,
   } = useWordGameState(config);
 
+  const { t } = useLanguage();
   const lastAnswerRef = useRef<string>('');
+  const [showReading, setShowReading] = useState(false);
+
+  useEffect(() => {
+    setShowReading(false);
+  }, [currentIndex]);
 
   const handleSubmit = (answer: string) => {
     lastAnswerRef.current = answer;
@@ -82,26 +89,39 @@ export default function WordGameScreen({ config, onFinish, onQuit }: WordGameScr
       </div>
 
       <div className={styles.questionArea}>
-        <div className={styles.questionRow}>
-          <div className={styles.question}>{displayText}</div>
-          {config.gameMode === 'wordToMeaning' ? (
-            <SpeakButton
-              text={word.expression}
-              reading={word.reading}
-              lang={speakLang}
-              size="medium"
-            />
-          ) : (
-            <SpeakButton
-              text={meaning}
-              lang={meaningLang}
-              size="medium"
-            />
+        <div className={styles.questionBlock}>
+          <div className={styles.questionLine}>
+            <div className={styles.question}>{displayText}</div>
+            <div className={styles.speakWrap}>
+              {config.gameMode === 'wordToMeaning' ? (
+                <SpeakButton
+                  text={word.expression}
+                  reading={word.reading}
+                  lang={speakLang}
+                  size="medium"
+                />
+              ) : (
+                <SpeakButton
+                  text={meaning}
+                  lang={meaningLang}
+                  size="medium"
+                />
+              )}
+            </div>
+          </div>
+          {displayReading && (
+            showReading ? (
+              <div className={styles.reading}>{displayReading}</div>
+            ) : (
+              <button
+                className={styles.readingToggle}
+                onClick={() => setShowReading(true)}
+              >
+                {t.showFurigana}
+              </button>
+            )
           )}
         </div>
-        {displayReading && (
-          <div className={styles.reading}>{displayReading}</div>
-        )}
       </div>
 
       <div className={styles.inputArea}>

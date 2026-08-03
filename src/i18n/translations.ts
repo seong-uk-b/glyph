@@ -61,6 +61,7 @@ export interface Translations {
   topikLevel: string;
   meaningToWord: string;
   wordToMeaning: string;
+  showFurigana: string;
   language: string;
   english: string;
   korean: string;
@@ -168,6 +169,7 @@ const en: Translations = {
   topikLevel: 'TOPIK Level',
   meaningToWord: 'Meaning → Word',
   wordToMeaning: 'Word → Meaning',
+  showFurigana: 'Show reading',
   language: 'Language',
   english: 'English',
   korean: '한국어',
@@ -275,6 +277,7 @@ const ko: Translations = {
   topikLevel: 'TOPIK 레벨',
   meaningToWord: '뜻 → 단어',
   wordToMeaning: '단어 → 뜻',
+  showFurigana: '발음 보기',
   language: '언어',
   english: 'English',
   korean: '한국어',
@@ -382,6 +385,7 @@ const ja: Translations = {
   topikLevel: 'TOPIKレベル',
   meaningToWord: '意味 → 単語',
   wordToMeaning: '単語 → 意味',
+  showFurigana: 'ふりがな表示',
   language: '言語',
   english: 'English',
   korean: '한국어',
