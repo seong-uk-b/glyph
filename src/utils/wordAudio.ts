@@ -20,17 +20,19 @@ const missing = new Set<string>();
 /**
  * 사전 생성 mp3 재생을 시도한다.
  * 재생을 시작하면 HTMLAudioElement를, 파일이 없으면 null을 반환한다.
+ * 한국어 단어는 reading이 없으므로 빈 문자열로 해시한다.
  */
 export function tryPlayWordAudio(
   expression: string,
   reading: string,
+  lang: 'ja' | 'ko' = 'ja',
 ): Promise<HTMLAudioElement | null> {
   const id = wordAudioId(expression, reading);
   if (missing.has(id)) {
     return Promise.resolve(null);
   }
 
-  const url = `${process.env.PUBLIC_URL || '.'}/audio/ja/${id}.mp3`;
+  const url = `${process.env.PUBLIC_URL || '.'}/audio/${lang}/${id}.mp3`;
   const audio = new Audio(url);
 
   return new Promise(resolve => {

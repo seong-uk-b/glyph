@@ -22,9 +22,9 @@ export default function SpeakButton({ text, reading, lang = 'ja', size = 'medium
       setTimeout(() => setIsPlaying(false), duration);
     };
 
-    // 일본어 단어는 사전 생성 mp3 우선, 없으면 Web Speech API 폴백
-    if (lang === 'ja' && reading) {
-      tryPlayWordAudio(text, reading).then(audio => {
+    // 일본어/한국어 단어는 사전 생성 mp3 우선, 없으면 Web Speech API 폴백
+    if (lang === 'ja' || lang === 'ko') {
+      tryPlayWordAudio(text, reading ?? '', lang).then(audio => {
         if (audio) {
           audio.onended = () => setIsPlaying(false);
         } else {
