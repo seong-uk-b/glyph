@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import { speak } from '../../utils/speech';
+import { tryPlayWordAudio } from '../../utils/wordAudio';
 import styles from './SpeakButton.module.css';
 
 interface SpeakButtonProps {
@@ -14,10 +15,25 @@ export default function SpeakButton({ text, reading, lang = 'ja', size = 'medium
 
   const handleClick = useCallback(() => {
     setIsPlaying(true);
-    speak(text, lang, reading);
 
-    const duration = Math.max(500, (reading || text).length * 200);
-    setTimeout(() => setIsPlaying(false), duration);
+    const fallback = () => {
+      speak(text, lang, reading);
+      const duration = Math.max(500, (reading || text).length * 200);
+      setTimeout(() => setIsPlaying(false), duration);
+    };
+
+    // 일본어 단어는 사전 생성 mp3 우선, 없으면 Web Speech API 폴백
+    if (lang === 'ja' && reading) {
+      tryPlayWordAudio(text, reading).then(audio => {
+        if (audio) {
+          audio.onended = () => setIsPlaying(false);
+        } else {
+          fallback();
+        }
+      });
+    } else {
+      fallback();
+    }
   }, [text, reading, lang]);
 
   return (
