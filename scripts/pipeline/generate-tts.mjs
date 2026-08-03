@@ -15,7 +15,7 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), '../..');
 const API_KEY = process.env.GOOGLE_TTS_API_KEY;
 const CONCURRENCY = 3;
 const REQUEST_INTERVAL_MS = 1100; // 워커당 요청 간격 — 분당 약 160건으로 제한 (429 방지)
@@ -155,7 +155,7 @@ await Promise.all(Array.from({ length: CONCURRENCY }, worker));
 
 console.log(`\n완료: 성공 ${done - failures.length}개 / 실패 ${failures.length}개`);
 if (failures.length > 0) {
-  const logPath = join(ROOT, 'scripts/tts-failures.json');
+  const logPath = join(ROOT, 'scripts/pipeline/tts-failures.json');
   writeFileSync(logPath, JSON.stringify(failures, null, 2));
   console.log(`실패 목록: ${logPath} — 재실행하면 실패분만 다시 시도합니다.`);
   process.exit(1);

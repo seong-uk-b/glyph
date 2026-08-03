@@ -6,6 +6,7 @@
   "homepage": "https://seong-uk-b.github.io/glyph",
   "dependencies": {
     "@capacitor/core": "^8.5.0",
+    "@capacitor/haptics": "^8.0.2",
     "@capacitor/ios": "^8.5.0",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
@@ -30,7 +31,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "build:ios": "PUBLIC_URL=. react-scripts build && cap sync ios",
-    "tts:generate": "node scripts/generate-tts.mjs",
+    "tts:generate": "node scripts/pipeline/generate-tts.mjs",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
