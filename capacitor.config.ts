@@ -1,7 +1,7 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.glyph.app',
+  appId: 'com.seonguk.glyph',
   appName: 'Glyph',
   webDir: 'build',
 };
