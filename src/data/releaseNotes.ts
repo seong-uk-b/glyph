@@ -10,6 +10,30 @@ export interface ReleaseNote {
 
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 'v1.2',
+    date: '2026-08-03',
+    changes: {
+      ko: [
+        '전체 단어 발음을 고품질 Neural 음성 mp3로 교체 (일본어 3,524 + 한국어 1,060단어, 오프라인 재생)',
+        'TOPIK 1급 어휘 305 → 696개 확장',
+        'TOPIK 2급 364단어 신설 (직장, 쇼핑, 여행, 건강 등)',
+        '일본어 악센트 정확도 개선 (한자 기반 음성 생성)',
+      ],
+      en: [
+        'All word pronunciations upgraded to high-quality Neural TTS mp3 (3,524 Japanese + 1,060 Korean words, offline playback)',
+        'TOPIK Level 1 vocabulary expanded from 305 to 696 words',
+        'New TOPIK Level 2 with 364 words (work, shopping, travel, health, etc.)',
+        'Improved Japanese pitch accent (kanji-based speech generation)',
+      ],
+      ja: [
+        '全単語の発音を高品質Neural音声mp3に刷新（日本語3,524語 + 韓国語1,060語、オフライン再生対応）',
+        'TOPIK 1級語彙を305語から696語に拡張',
+        'TOPIK 2級364語を新設（職場、買い物、旅行、健康など）',
+        '日本語アクセントの精度改善（漢字ベースの音声生成）',
+      ],
+    },
+  },
+  {
     version: 'v1.1',
     date: '2026-08-03',
     changes: {
