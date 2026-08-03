@@ -18,7 +18,8 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT_DIR = join(ROOT, 'public/audio/ja');
 const API_KEY = process.env.GOOGLE_TTS_API_KEY;
 const VOICE = 'ja-JP-Neural2-B';
-const CONCURRENCY = 6;
+const CONCURRENCY = 3;
+const REQUEST_INTERVAL_MS = 1100; // 워커당 요청 간격 — 분당 약 160건으로 제한 (429 방지)
 
 if (!API_KEY) {
   console.error('GOOGLE_TTS_API_KEY 환경변수가 필요합니다.');
@@ -74,24 +75,33 @@ function ttsInput(w) {
   return cleanForSpeech(ambiguous ? w.reading : w.expression);
 }
 
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
 async function synthesize(text) {
-  const res = await fetch(
-    `https://texttospeech.googleapis.com/v1/text:synthesize?key=${API_KEY}`,
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        input: { text },
-        voice: { languageCode: 'ja-JP', name: VOICE },
-        audioConfig: { audioEncoding: 'MP3', speakingRate: 0.9 },
-      }),
-    },
-  );
-  if (!res.ok) {
+  for (let attempt = 1; ; attempt++) {
+    const res = await fetch(
+      `https://texttospeech.googleapis.com/v1/text:synthesize?key=${API_KEY}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          input: { text },
+          voice: { languageCode: 'ja-JP', name: VOICE },
+          audioConfig: { audioEncoding: 'MP3', speakingRate: 0.9 },
+        }),
+      },
+    );
+    if (res.ok) {
+      const { audioContent } = await res.json();
+      return Buffer.from(audioContent, 'base64');
+    }
+    // 429(속도 제한)는 지수 백오프 후 재시도
+    if (res.status === 429 && attempt < 6) {
+      await sleep(2000 * attempt);
+      continue;
+    }
     throw new Error(`HTTP ${res.status}: ${(await res.text()).slice(0, 200)}`);
   }
-  const { audioContent } = await res.json();
-  return Buffer.from(audioContent, 'base64');
 }
 
 mkdirSync(OUT_DIR, { recursive: true });
@@ -119,6 +129,7 @@ async function worker() {
     } catch (err) {
       failures.push({ ...w, error: String(err) });
     }
+    await sleep(REQUEST_INTERVAL_MS);
     done++;
     if (done % 100 === 0) console.log(`진행: ${done}개 완료`);
   }
