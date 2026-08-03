@@ -1,25 +1,37 @@
 #!/usr/bin/env node
 /**
- * 일본어 단어 발음 mp3 일괄 생성 (Google Cloud Text-to-Speech)
+ * 단어 발음 mp3 일괄 생성 (Google Cloud Text-to-Speech)
  *
  * 사용법:
  *   GOOGLE_TTS_API_KEY=<발급받은 키> npm run tts:generate
  *
- * - 출력: public/audio/ja/<id>.mp3 (id는 fnv1a(expression|reading) — src/utils/wordAudio.ts와 동일)
+ * - 출력: public/audio/<lang>/<id>.mp3 (id는 fnv1a(expression|reading) — src/utils/wordAudio.ts와 동일)
  * - 이미 생성된 파일은 건너뛰므로 중단 후 재실행해도 이어서 진행됨
- * - TTS 입력: 기본은 한자 표기(악센트 사전 참조를 위해).
+ * - 일본어 TTS 입력: 기본은 한자 표기(악센트 사전 참조를 위해).
  *   같은 표기가 여러 읽기를 갖는 단어(一日 등)는 읽기(かな)를 입력해 오독을 방지.
+ * - 한국어는 표기 자체가 발음이므로 expression을 그대로 사용 (reading 없음 → id는 'expression|')
  */
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const OUT_DIR = join(ROOT, 'public/audio/ja');
 const API_KEY = process.env.GOOGLE_TTS_API_KEY;
-const VOICE = 'ja-JP-Neural2-B';
 const CONCURRENCY = 3;
 const REQUEST_INTERVAL_MS = 1100; // 워커당 요청 간격 — 분당 약 160건으로 제한 (429 방지)
+
+const LANG_CONFIG = {
+  ja: {
+    files: ['src/data/words/n5.ts', 'src/data/words/n4.ts', 'src/data/words/n3.ts'],
+    hasReading: true,
+    voice: { languageCode: 'ja-JP', name: 'ja-JP-Neural2-B' },
+  },
+  ko: {
+    files: ['src/data/korean-words.ts', 'src/data/korean-words-2.ts'],
+    hasReading: false,
+    voice: { languageCode: 'ko-KR', name: 'ko-KR-Neural2-A' },
+  },
+};
 
 if (!API_KEY) {
   console.error('GOOGLE_TTS_API_KEY 환경변수가 필요합니다.');
@@ -41,27 +53,6 @@ function unescapeTs(s) {
   return s.replace(/\\'/g, "'").replace(/\\\\/g, '\\');
 }
 
-// 단어 데이터 파싱
-const words = [];
-for (const file of ['n5.ts', 'n4.ts', 'n3.ts']) {
-  const src = readFileSync(join(ROOT, 'src/data/words', file), 'utf-8');
-  const re = /\{ expression: '((?:[^'\\]|\\.)*)', reading: '((?:[^'\\]|\\.)*)'/g;
-  let m;
-  while ((m = re.exec(src)) !== null) {
-    words.push({ expression: unescapeTs(m[1]), reading: unescapeTs(m[2]) });
-  }
-}
-console.log(`단어 ${words.length}개 파싱 완료`);
-
-// 같은 표기가 서로 다른 읽기를 가지면(一日: いちにち/ついたち 등) 한자 입력 시
-// 하나의 발음으로 뭉개지므로, 해당 단어들은 읽기를 TTS 입력으로 사용
-const readingsByExpr = new Map();
-for (const w of words) {
-  const set = readingsByExpr.get(w.expression) ?? new Set();
-  set.add(w.reading);
-  readingsByExpr.set(w.expression, set);
-}
-
 function cleanForSpeech(s) {
   return s
     .split(';')[0]                 // '足; 脚' → '足'
@@ -70,14 +61,40 @@ function cleanForSpeech(s) {
     .trim();
 }
 
+// 단어 데이터 파싱
+const words = [];
+for (const [lang, cfg] of Object.entries(LANG_CONFIG)) {
+  for (const file of cfg.files) {
+    const src = readFileSync(join(ROOT, file), 'utf-8');
+    const re = cfg.hasReading
+      ? /\{ expression: '((?:[^'\\]|\\.)*)', reading: '((?:[^'\\]|\\.)*)'/g
+      : /\{ expression: '((?:[^'\\]|\\.)*)', meanings/g;
+    let m;
+    while ((m = re.exec(src)) !== null) {
+      words.push({ lang, expression: unescapeTs(m[1]), reading: cfg.hasReading ? unescapeTs(m[2]) : '' });
+    }
+  }
+}
+console.log(`단어 파싱 완료: ${words.length}개 (ja: ${words.filter(w => w.lang === 'ja').length}, ko: ${words.filter(w => w.lang === 'ko').length})`);
+
+// 같은 표기가 서로 다른 읽기를 가지면(一日: いちにち/ついたち 등) 한자 입력 시
+// 하나의 발음으로 뭉개지므로, 해당 단어들은 읽기를 TTS 입력으로 사용
+const readingsByExpr = new Map();
+for (const w of words) {
+  const key = `${w.lang}:${w.expression}`;
+  const set = readingsByExpr.get(key) ?? new Set();
+  set.add(w.reading);
+  readingsByExpr.set(key, set);
+}
+
 function ttsInput(w) {
-  const ambiguous = readingsByExpr.get(w.expression).size > 1;
-  return cleanForSpeech(ambiguous ? w.reading : w.expression);
+  const ambiguous = readingsByExpr.get(`${w.lang}:${w.expression}`).size > 1;
+  return cleanForSpeech(ambiguous && w.reading ? w.reading : w.expression);
 }
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
-async function synthesize(text) {
+async function synthesize(text, voice) {
   for (let attempt = 1; ; attempt++) {
     const res = await fetch(
       `https://texttospeech.googleapis.com/v1/text:synthesize?key=${API_KEY}`,
@@ -86,7 +103,7 @@ async function synthesize(text) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           input: { text },
-          voice: { languageCode: 'ja-JP', name: VOICE },
+          voice,
           audioConfig: { audioEncoding: 'MP3', speakingRate: 0.9 },
         }),
       },
@@ -104,16 +121,15 @@ async function synthesize(text) {
   }
 }
 
-mkdirSync(OUT_DIR, { recursive: true });
+for (const lang of Object.keys(LANG_CONFIG)) {
+  mkdirSync(join(ROOT, 'public/audio', lang), { recursive: true });
+}
 
 const queue = words.map(w => ({
   ...w,
-  id: fnv1a(`${w.expression}|${w.reading}`),
+  outPath: join(ROOT, 'public/audio', w.lang, `${fnv1a(`${w.expression}|${w.reading}`)}.mp3`),
   input: ttsInput(w),
-})).filter(w => {
-  if (!w.input) return false;
-  return !existsSync(join(OUT_DIR, `${w.id}.mp3`));
-});
+})).filter(w => w.input && !existsSync(w.outPath));
 
 console.log(`생성 대상 ${queue.length}개 (기존 파일은 건너뜀)`);
 
@@ -124,8 +140,8 @@ async function worker() {
   while (queue.length > 0) {
     const w = queue.shift();
     try {
-      const mp3 = await synthesize(w.input);
-      writeFileSync(join(OUT_DIR, `${w.id}.mp3`), mp3);
+      const mp3 = await synthesize(w.input, LANG_CONFIG[w.lang].voice);
+      writeFileSync(w.outPath, mp3);
     } catch (err) {
       failures.push({ ...w, error: String(err) });
     }
