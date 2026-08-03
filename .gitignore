@@ -38,3 +38,13 @@ yarn-error.log*
 
 # Misc
 .claude/
+.omc/
+
+# Capacitor iOS (생성 산출물)
+ios/App/Pods/
+ios/App/output/
+ios/App/App/public/
+ios/App/App/capacitor.config.json
+ios/App/DerivedData/
+ios/App/xcuserdata/
+**/*.xcuserdatad/

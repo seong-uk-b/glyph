@@ -1,6 +1,7 @@
 .footer {
   border-top: 1px solid var(--border-subtle);
   padding: 1rem;
+  padding-bottom: calc(1rem + env(safe-area-inset-bottom));
   text-align: center;
   margin-top: auto;
   display: flex;
