@@ -45,9 +45,13 @@ effect / 비동기 로딩 / dedup 로직을 건드린 변경은 보고에
 ## 배포 검증
 
 **웹 = `main` 에 push 하면 GitHub Actions 가 자동 배포한다** (`.github/workflows/deploy.yml`,
-Pages `build_type: workflow`). ⛔ `npm run deploy`(gh-pages 브랜치 push)는 **효과가 없다** —
-Pages 소스가 워크플로우라 gh-pages 브랜치는 읽히지 않는다 (2026-08-04 확인).
+Pages `build_type: workflow`). 이것이 **유일한 웹 배포 경로**다.
 iOS 실기기 = Xcode ▶ (수동).
+
+⛔ **`gh-pages` 패키지/브랜치 방식을 다시 도입하지 말 것.** (2026-08-04 제거 — 근거:
+`docs/follow-ups/2026-08-04-deploy-v13.md`) Pages 소스가 워크플로우라 gh-pages 브랜치는
+읽히지 않는다 — `npm run deploy` 가 "Published" 를 출력해도 사이트는 갱신되지 않아
+배포됐다고 착각하게 만든다.
 
 "배포됐냐" 판정 = **push 여부가 아니라 Actions 성공 + 라이브 번들 해시 일치**:
 

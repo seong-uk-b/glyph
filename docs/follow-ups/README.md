@@ -64,9 +64,9 @@
 
 ### P2 — 보통
 
-- [2026-08-04-deploy-v13.md](2026-08-04-deploy-v13.md) — v1.3 배포 및 배포 경로 정리 (Actions 자동배포 vs 죽은 npm run deploy) (in-progress)
-
 ### P3 — 낮음
+
+- [2026-08-04-deploy-v13.md](2026-08-04-deploy-v13.md) — 배포 경로 정리 완료, 아이폰 실기기 재설치만 남음 (in-progress)
 
 ---
 

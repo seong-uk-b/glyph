@@ -24,8 +24,7 @@
   },
   "devDependencies": {
     "@capacitor/assets": "^3.0.5",
-    "@capacitor/cli": "^8.5.0",
-    "gh-pages": "^6.1.1"
+    "@capacitor/cli": "^8.5.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -33,9 +32,7 @@
     "build:ios": "PUBLIC_URL=. react-scripts build && cap sync ios",
     "tts:generate": "node scripts/pipeline/generate-tts.mjs",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
