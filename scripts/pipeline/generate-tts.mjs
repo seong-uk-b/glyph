@@ -84,11 +84,13 @@ console.log(`단어 파싱 완료: ${words.length}개 (ja: ${words.filter(w => w
 
 // 같은 표기가 서로 다른 읽기를 가지면(一日: いちにち/ついたち 등) 한자 입력 시
 // 하나의 발음으로 뭉개지므로, 해당 단어들은 읽기를 TTS 입력으로 사용
+// 키는 **정리 후** 표기로 잡는다 — `～年`(ねん) 과 `年`(とし) 처럼 ～ 만 다른 쌍은
+// 정리하면 같은 입력이 되어 한 음성을 공유하게 되므로, 둘 다 가나로 보내야 구분된다.
 const readingsByExpr = new Map();
 for (const w of words) {
-  const key = `${w.lang}:${w.expression}`;
+  const key = `${w.lang}:${cleanForSpeech(w.expression)}`;
   const set = readingsByExpr.get(key) ?? new Set();
-  set.add(w.reading);
+  set.add(cleanForSpeech(w.reading));
   readingsByExpr.set(key, set);
 }
 
@@ -101,7 +103,7 @@ const FORCE_KANA = new Set([
 ]);
 
 function ttsInput(w) {
-  const ambiguous = readingsByExpr.get(`${w.lang}:${w.expression}`).size > 1;
+  const ambiguous = readingsByExpr.get(`${w.lang}:${cleanForSpeech(w.expression)}`).size > 1;
   const useReading = (ambiguous || FORCE_KANA.has(w.expression)) && w.reading;
   return cleanForSpeech(useReading ? w.reading : w.expression);
 }
