@@ -1,5 +1,11 @@
 # Glyph (글리프) - 개발 가이드
 
+**세션 연속성 (하네스)**: 진행 중 트랙은 **`docs/harness/{트랙}.md`** 단위 파일로 관리
+(인덱스·활성트랙 표 = [`docs/harness/session-state.md`](docs/harness/session-state.md)). 세션 시작 시
+**`/kickoff {트랙}`** 으로 그 트랙만 로드 — 인자 없는 `/kickoff` 는 차단·되묻기(`.claude/skills/kickoff`).
+긴 세션 종료 전 갱신한다(`.claude/skills/handoff`). 검증 명령 정본 = [`docs/harness/verification.md`](docs/harness/verification.md).
+운영 모델과 한계 = [`docs/harness/README.md`](docs/harness/README.md).
+
 ## 프로젝트 개요
 다국어 문자/어휘 학습 앱. 현재 일본어 학습 지원, 한국어 학습 추가 예정.
 
@@ -49,13 +55,12 @@ src/
 ```
 
 ## 현재 구현된 기능
-- [x] 일본어 히라가나/카타카나 퀴즈
-- [x] 일본어 가나 문자표
-- [x] JLPT N5~N3 단어 퀴즈 (3,524단어)
-- [x] 한국어 번역 62% 커버리지
-- [x] 일본어 발음 TTS
-- [x] 오답 클릭 후 넘어가기
-- [x] 다국어 UI (한국어/영어/일본어)
+- [x] 일본어 히라가나/카타카나 퀴즈 + 가나 문자표
+- [x] JLPT N5~N1 단어 퀴즈 (4,702단어, 전량 ko/en 뜻)
+- [x] 한국어 한글/조합 퀴즈 + TOPIK 1·2급 단어 퀴즈 (1,060단어)
+- [x] 발음 mp3 사전 생성 (Neural TTS, 오프라인 재생) + Web Speech 폴백
+- [x] 듣기 퀴즈 모드, 발음 자동 재생, 오답 복습 모드, 학습 스트릭/통계
+- [x] iOS 앱 (Capacitor), 햅틱 피드백, 다국어 UI (한국어/영어/일본어)
 
 ---
 
@@ -175,6 +180,7 @@ CREATE TABLE missed_items (
   3. `src/i18n/translations.ts`의 `footerText` — 세 언어 모두 버전 번호 업데이트
 - **다국어:** 각 릴리즈 항목에 `changes: { ko, en, ja }` 세 언어 모두 작성
 - **버전 형식:** `vX.Y` (예: v0.9), 날짜는 `YYYY-MM-DD`
+- 이 계약을 포함한 동반갱신 계약 레지스트리 = [`docs/harness/sync-contracts.md`](docs/harness/sync-contracts.md)
 
 ### Git 커밋
 - **커밋 메시지는 한글로 작성**
@@ -212,6 +218,55 @@ CREATE TABLE missed_items (
 --accent-purple: #c678dd
 --accent-cyan: #56b6c2
 ```
+
+---
+
+## 브랜치
+
+- **기본 브랜치 = `main`**. PR base 도 동일.
+- 시크릿 파일(`.env.*` 등)은 **커밋 금지**. 로컬에만 둔다.
+- 신규 feature 브랜치는 기본 브랜치에서 분기, 다 끝나면 기본 브랜치로 머지.
+
+### 절대 임의로 하지 말 것
+
+- ⛔ **승인 없이 `git checkout {기존브랜치}` / `git switch {기존브랜치}` 금지.**
+  - cherry-pick / rebase / merge 등 "다른 브랜치를 checkout 해야 하는 작업" 도 전환에 포함.
+  - 격리가 필요하면 **새 worktree** 로 처리. 현재 checkout 은 건드리지 않는다 —
+    working tree 가 다른 세션과 공유되므로 활성 브랜치를 바꾸면 그쪽 미커밋 작업이 깨진다.
+  - 예외: 사용자가 직접 그 브랜치를 checkout 해 둔 경우.
+- ⛔ **승인 없이 `git checkout .` / `git restore .` 등 working tree 전체 복원 금지.**
+  같은 이유 — 다른 세션의 미커밋 변경까지 복구 불가로 파괴한다.
+  파일 단위 복원(`git checkout -- {파일}`, `git restore {파일}`)은 허용.
+- **커밋 직전에는 반드시 현재 브랜치를 확인** (`git rev-parse --abbrev-ref HEAD`).
+
+---
+
+## 검증
+
+- 에이전트가 직접 확인할 수 없는 동작(TTS 소리·햅틱·실기기)은 확인을 시도하지 않는다. 검증은 다음까지:
+  1. 로컬 자동: `npx tsc --noEmit`, `CI=true npx react-scripts test --watchAll=false`, `npm run build:ios`
+  2. 보고에 **수동 테스트 항목 체크리스트**(시나리오 + 기대 결과)를 별도 섹션으로 안내
+- 빌드 통과 ≠ 런타임 정상 — React StrictMode 는 effect 를 이중 호출한다 (dev 클릭 테스트 필요 명시).
+- 명령 정본 = `docs/harness/verification.md`.
+
+---
+
+## 절대 하지 말 것 (전역)
+
+- ⛔ **API 키·시크릿을 저장소·문서·커밋 메시지에 기록 금지.** (2026-08-04 확정 —
+  근거: `docs/follow-ups/2026-08-04-tts-api-key-cleanup.md`, TTS 키 대화 노출 사고)
+  - 대안: 환경변수로만 전달(`GOOGLE_TTS_API_KEY=... npm run tts:generate`), 사용 후 콘솔에서 키 삭제.
+- ⛔ **발음 mp3 를 손으로 추가/이름변경 금지.** 파일명 해시가 코드와 맞물려 있다.
+  - 대안: `scripts/pipeline/generate-tts.mjs` 로만 생성 (`scripts/pipeline/README.md`).
+
+---
+
+## follow-ups 디렉토리
+
+지금 안 하지만 잊지 말아야 할 작업은:
+
+- `docs/follow-ups/{YYYY-MM-DD}-{topic}.md` 로 저장
+- `docs/follow-ups/README.md` 인덱스에 한 줄 추가
 
 ---
 

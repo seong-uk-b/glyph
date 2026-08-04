@@ -36,8 +36,11 @@ yarn-error.log*
 # TypeScript
 *.tsbuildinfo
 
-# Misc
-.claude/
+# Misc — .claude 는 하네스 파일(스킬·훅·settings.json)만 추적
+.claude/*
+!.claude/settings.json
+!.claude/skills/
+!.claude/hooks/
 .omc/
 
 # Capacitor iOS (생성 산출물)
