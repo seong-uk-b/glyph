@@ -92,9 +92,18 @@ for (const w of words) {
   readingsByExpr.set(key, set);
 }
 
+// 우리 데이터에는 읽기가 하나뿐이지만 일본어에서는 다독음이라, 한자를 보내면
+// TTS 가 다른 읽기를 골라버리는 단어 — 가나로 강제한다.
+// (예: 床 → TTS 는 とこ 로 읽지만 우리 뜻은 ゆか "바닥")
+// 새로 발견하면 여기에 추가하고 해당 mp3 를 지운 뒤 재생성할 것.
+const FORCE_KANA = new Set([
+  '床',   // ゆか(바닥) ↔ とこ(잠자리) — 2026-08-04 사용자 신고
+]);
+
 function ttsInput(w) {
   const ambiguous = readingsByExpr.get(`${w.lang}:${w.expression}`).size > 1;
-  return cleanForSpeech(ambiguous && w.reading ? w.reading : w.expression);
+  const useReading = (ambiguous || FORCE_KANA.has(w.expression)) && w.reading;
+  return cleanForSpeech(useReading ? w.reading : w.expression);
 }
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
