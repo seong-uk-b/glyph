@@ -92,3 +92,4 @@ ls build/static/js/main.*.js                     # 위 결과와 같아야 반�
 |---|---|---|
 | mp3 우선 재생 | 단어 퀴즈에서 스피커 버튼 | Neural 음성(자연스러움) — 기계음이면 TTS 폴백이 뜬 것 |
 | 폴백 | mp3 없는 단어(신규 추가 직후) | Web Speech 음성으로라도 재생됨 |
+| 가나 단어 어두 조사 오독 | 가나만으로 된 일본어 단어를 추가했으면 `afplay public/audio/ja/<id>.mp3` | 어두 `は` 가 「하」로 들려야 정상 (「와」면 오독 — 대응은 `scripts/pipeline/README.md`) |
