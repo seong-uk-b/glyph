@@ -24,11 +24,13 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
+      # npm ci 는 락파일을 엄격 검증한다 — 로컬 npm(12)이 생성한 락을
+      # CI 의 npm(10)이 거부해 배포가 깨진 적이 있어 install 로 둔다.
       - name: Install dependencies
-        run: npm ci
+        run: npm install --no-audit --no-fund
 
       - name: Build
         run: npm run build
