@@ -22,7 +22,12 @@ const REQUEST_INTERVAL_MS = 1100; // 워커당 요청 간격 — 분당 약 160�
 
 const LANG_CONFIG = {
   ja: {
-    files: ['src/data/words/n5.ts', 'src/data/words/n4.ts', 'src/data/words/n3.ts'],
+    // 레벨 파일을 추가하면 여기에도 반드시 등록할 것 — 누락되면 그 레벨 단어는
+    // mp3 없이 배포돼 Web Speech 폴백(가나 입력)으로 읽힌다 (docs/harness/sync-contracts.md)
+    files: [
+      'src/data/words/n5.ts', 'src/data/words/n4.ts', 'src/data/words/n3.ts',
+      'src/data/words/n2.ts', 'src/data/words/n1.ts',
+    ],
     hasReading: true,
     voice: { languageCode: 'ja-JP', name: 'ja-JP-Neural2-B' },
   },

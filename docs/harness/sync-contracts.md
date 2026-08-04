@@ -10,6 +10,7 @@
 |---|---|---|---|
 | 버전 릴리즈 (`src/data/releaseNotes.ts` 에 새 버전) | ① `README.md` 버전 히스토리 ② `src/i18n/translations.ts` 의 `footerText` 3개 언어 | ko 기준 동기화, `vX.Y` 형식 | `grep -c "v{버전}" README.md src/i18n/translations.ts` — 둘 다 1 이상 |
 | 단어 데이터 추가/수정 (`src/data/words/*.ts`, `src/data/korean-words*.ts`) | 발음 mp3 재생성 (신규분만) + 파일 헤더 `Total:` 주석 | `GOOGLE_TTS_API_KEY=… npm run tts:generate` | `ls public/audio/{ja,ko} \| wc -l` 이 단어 수와 정합 (공유 해시만큼 오차 허용) |
+| **새 레벨 파일 생성** (`src/data/words/n2.ts` 같은) | ① `src/data/words/index.ts` 등록 ② **`scripts/pipeline/generate-tts.mjs` 의 `LANG_CONFIG.files`** | 두 곳 모두에 경로 추가 | `npm run tts:generate` 출력의 `단어 파싱 완료: N개` 가 실제 단어 수와 일치 (2026-08-04 실측: n2/n1 누락으로 1,118개가 조용히 빠져 있었음) |
 | `fnv1a` 해시 변경 (`src/utils/wordAudio.ts`) | `scripts/pipeline/generate-tts.mjs` 의 동일 함수 + **mp3 전체 재생성** | 두 구현 동일 유지 | `diff <(sed -n '/fnv1a/,/^}/p' src/utils/wordAudio.ts) <(sed -n '/^function fnv1a/,/^}/p' scripts/pipeline/generate-tts.mjs)` 육안 대조 |
 | i18n 키 추가 (`translations.ts` interface) | en/ko/ja 세 블록 모두 | 같은 키 3회 | `npx tsc --noEmit` (누락 시 타입 오류) |
 
