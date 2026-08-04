@@ -10,6 +10,36 @@ export interface ReleaseNote {
 
 export const releaseNotes: ReleaseNote[] = [
   {
+    version: 'v1.3',
+    date: '2026-08-04',
+    changes: {
+      ko: [
+        '오답 복습 모드 — 틀린 단어가 자동 저장되고 홈에서 복습, 맞히면 목록에서 제거',
+        '듣기 퀴즈 모드 — 발음을 듣고 뜻 고르기, 발음 자동 재생 옵션',
+        '학습 스트릭·오늘 통계 표시 (모든 게임 집계)',
+        'JLPT 어휘 1,178개 추가 (총 4,702단어) 및 레벨 현대 기준 재배정',
+        'JLPT N2·N1 레벨 신설 (930/188단어, 계속 확장 예정)',
+        '정답/오답 햅틱 피드백, 터치 조작감 개선',
+      ],
+      en: [
+        'Review mode — missed words auto-saved, practice from home, mastered words drop off',
+        'Listening quiz mode — hear the word and pick the meaning, plus auto-play option',
+        'Study streak & daily stats (counted across all games)',
+        'Added 1,178 JLPT words (4,702 total) with modernized level assignments',
+        'New JLPT N2 & N1 levels (930/188 words, expanding)',
+        'Haptic feedback on answers, improved touch handling',
+      ],
+      ja: [
+        '復習モード — 間違えた単語を自動保存し、ホームから復習。正解すると一覧から除外',
+        'リスニングクイズモード — 発音を聞いて意味を選択、自動再生オプション付き',
+        '学習ストリーク・本日の統計表示（全ゲーム集計）',
+        'JLPT語彙1,178語追加（計4,702語）、レベルを現代基準に再配置',
+        'JLPT N2・N1レベル新設（930/188語、拡張予定）',
+        '正解/不正解のハプティックフィードバック、タッチ操作性改善',
+      ],
+    },
+  },
+  {
     version: 'v1.2',
     date: '2026-08-03',
     changes: {

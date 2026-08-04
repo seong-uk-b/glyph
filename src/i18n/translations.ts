@@ -122,7 +122,7 @@ const en: Translations = {
   // Header & Footer
   appTitle: 'Glyph',
   back: '← Back',
-  footerText: 'Glyph v1.2',
+  footerText: 'Glyph v1.3',
   madeBy: 'Made by',
 
   // Home Screen
@@ -141,7 +141,7 @@ const en: Translations = {
   hangul: 'Hangul',
   hangulDesc: 'Korean Characters',
   words: 'Words',
-  wordsDesc: 'JLPT N5-N3 Vocabulary',
+  wordsDesc: 'JLPT N5-N1 Vocabulary',
   wordsDescKo: 'TOPIK Vocabulary',
   syllable: 'Syllables',
   syllableDesc: 'Build Korean Syllables',
@@ -240,7 +240,7 @@ const ko: Translations = {
   // Header & Footer
   appTitle: '글리프',
   back: '← 뒤로',
-  footerText: '글리프 v1.2',
+  footerText: '글리프 v1.3',
   madeBy: 'Made by',
 
   // Home Screen
@@ -259,7 +259,7 @@ const ko: Translations = {
   hangul: '한글',
   hangulDesc: '자음 & 모음',
   words: '단어',
-  wordsDesc: 'JLPT N5-N3 어휘',
+  wordsDesc: 'JLPT N5-N1 어휘',
   wordsDescKo: 'TOPIK 어휘',
   syllable: '조합',
   syllableDesc: '한글 조합 연습',
@@ -358,7 +358,7 @@ const ja: Translations = {
   // Header & Footer
   appTitle: 'グリフ',
   back: '← 戻る',
-  footerText: 'グリフ v1.2',
+  footerText: 'グリフ v1.3',
   madeBy: 'Made by',
 
   // Home Screen
@@ -377,7 +377,7 @@ const ja: Translations = {
   hangul: 'ハングル',
   hangulDesc: '子音 & 母音',
   words: '単語',
-  wordsDesc: 'JLPT N5-N3 語彙',
+  wordsDesc: 'JLPT N5-N1 語彙',
   wordsDescKo: 'TOPIK 語彙',
   syllable: '組み合わせ',
   syllableDesc: 'ハングル組み合わせ',
