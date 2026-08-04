@@ -93,3 +93,23 @@ ls build/static/js/main.*.js                     # 위 결과와 같아야 반�
 | mp3 우선 재생 | 단어 퀴즈에서 스피커 버튼 | Neural 음성(자연스러움) — 기계음이면 TTS 폴백이 뜬 것 |
 | 폴백 | mp3 없는 단어(신규 추가 직후) | Web Speech 음성으로라도 재생됨 |
 | 가나 단어 어두 조사 오독 | 가나만으로 된 일본어 단어를 추가했으면 `afplay public/audio/ja/<id>.mp3` | 어두 `は` 가 「하」로 들려야 정상 (「와」면 오독 — 대응은 `scripts/pipeline/README.md`) |
+| 단독 한자 다독음 오독 | **한자 1글자 표기**를 추가했으면 청취 확인 | 의도한 읽기로 들려야 정상 (다르면 `FORCE_KANA` 등록 후 해당 mp3 삭제·재생성) |
+| `～` 접사 입력 충돌 | 아래 명령 — `～X` 와 `X` 가 같은 음성을 공유하지 않는지 | 출력 0건 |
+
+```bash
+# 서로 다른 읽기인데 TTS 입력이 같아지는 쌍 (있으면 최소 한쪽이 오독)
+python3 - <<'EOF'
+import re
+from collections import defaultdict
+w=[]
+for f in ['n5','n4','n3','n2','n1']:
+    s=open(f'src/data/words/{f}.ts',encoding='utf-8').read()
+    w+=[(m.group(1),m.group(2)) for m in re.finditer(r"\{ expression: '((?:[^'\\]|\\.)*)', reading: '((?:[^'\\]|\\.)*)'",s)]
+c=lambda s: re.sub(r'\([^)]*\)','',re.sub(r'[～〜]','',s.split(';')[0])).strip()
+rd=defaultdict(set)
+for e,r in w: rd[c(e)].add(c(r))
+bi=defaultdict(set)
+for e,r in w: bi[c(r) if len(rd[c(e)])>1 else c(e)].add(c(r))
+print([k for k,v in bi.items() if len(v)>1])
+EOF
+```
