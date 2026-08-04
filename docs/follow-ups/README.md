@@ -64,7 +64,7 @@
 
 ### P2 — 보통
 
-- [2026-08-04-deploy-v13.md](2026-08-04-deploy-v13.md) — v1.3 웹 배포(npm run deploy) 및 실기기 재설치 (open)
+- [2026-08-04-deploy-v13.md](2026-08-04-deploy-v13.md) — v1.3 배포 및 배포 경로 정리 (Actions 자동배포 vs 죽은 npm run deploy) (in-progress)
 
 ### P3 — 낮음
 

@@ -44,13 +44,23 @@ effect / 비동기 로딩 / dedup 로직을 건드린 변경은 보고에
 
 ## 배포 검증
 
-배포는 수동이다: 웹 = `npm run deploy` (GitHub Pages), iOS = Xcode ▶ (실기기).
-push 는 배포를 트리거하지 않는다 — "배포됐냐"는 deploy 실행 여부로 판정한다.
+**웹 = `main` 에 push 하면 GitHub Actions 가 자동 배포한다** (`.github/workflows/deploy.yml`,
+Pages `build_type: workflow`). ⛔ `npm run deploy`(gh-pages 브랜치 push)는 **효과가 없다** —
+Pages 소스가 워크플로우라 gh-pages 브랜치는 읽히지 않는다 (2026-08-04 확인).
+iOS 실기기 = Xcode ▶ (수동).
+
+"배포됐냐" 판정 = **push 여부가 아니라 Actions 성공 + 라이브 번들 해시 일치**:
 
 ```bash
-git status -sb                          # ahead 0 인지
-git log origin/main..HEAD --oneline     # 미push 커밋 확인
+git status -sb                                   # ahead 0 인지
+gh run list --limit 3                            # 최신 실행이 success 인지
+curl -s https://seong-uk-b.github.io/glyph/ | grep -o 'main\.[a-z0-9]*\.js'
+ls build/static/js/main.*.js                     # 위 결과와 같아야 반영 완료
 ```
+
+⚠️ Actions 실패 이력: `npm ci` 가 락파일 엄격 검증에 실패해 배포가 조용히 깨진 적이 있다
+(로컬 npm 12 ↔ CI npm 10 해석 차이). push 후 성공 여부를 반드시 확인할 것 —
+사이트가 200 을 반환해도 **이전 버전을 서빙 중일 수 있다**.
 
 ## 완료 증거 기록
 
