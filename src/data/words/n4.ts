@@ -3,7 +3,7 @@ import { Word } from '../types';
 
 // JLPT N4 Vocabulary
 // Source: tanos.co.uk 기반 + Anki 덱 보충, 레벨은 현대 학습 기준으로 재배정 (2026-08-04)
-// Total: 1080 words
+// Total: 1079 words (tanos 기반 + Anki 보충, 레벨 재배정)
 
 export const n4Words: Word[] = [
   { expression: 'ああ', reading: 'ああ', meanings: { en: 'Ah!, Oh!', ko: '아아!, 오!' }, lang: 'ja', level: 'JLPT_N4' },
@@ -409,7 +409,7 @@ export const n4Words: Word[] = [
   { expression: '用意', reading: 'ようい', meanings: { en: 'preparation', ko: '준비' }, lang: 'ja', level: 'JLPT_N4' },
   { expression: '探す', reading: 'さがす', meanings: { en: 'to search, to seek, to look for', ko: '찾다' }, lang: 'ja', level: 'JLPT_N4' },
   { expression: '形', reading: 'かたち', meanings: { en: 'shape', ko: '모양' }, lang: 'ja', level: 'JLPT_N4' },
-  { expression: '運転', reading: 'うんてん', meanings: { en: 'driving', ko: '운전' }, lang: 'ja', level: 'JLPT_N4' },
+  { expression: '運転', reading: 'うんてん', meanings: { en: 'operation, driving', ko: '운전' }, lang: 'ja', level: 'JLPT_N4' },
   { expression: 'すっかり', reading: 'すっかり', meanings: { en: 'all, completely', ko: '완전히' }, lang: 'ja', level: 'JLPT_N4' },
   { expression: 'アナウンサー', reading: 'アナウンサー', meanings: { en: 'announcer', ko: '아나운서' }, lang: 'ja', level: 'JLPT_N4' },
   { expression: '消しゴム', reading: 'けしゴム', meanings: { en: 'eraser', ko: '지우개' }, lang: 'ja', level: 'JLPT_N4' },
@@ -1008,7 +1008,6 @@ export const n4Words: Word[] = [
   { expression: '居間', reading: 'いま', meanings: { en: 'living room', ko: '거실' }, lang: 'ja', level: 'JLPT_N4' },
   { expression: '祝う', reading: 'いわう', meanings: { en: 'to congratulate, to celebrate', ko: '축하하다' }, lang: 'ja', level: 'JLPT_N4' },
   { expression: '運', reading: 'うん', meanings: { en: 'fortune, luck', ko: '운' }, lang: 'ja', level: 'JLPT_N4' },
-  { expression: '運転', reading: 'うんてん', meanings: { en: 'operation, driving', ko: '운전' }, lang: 'ja', level: 'JLPT_N4' },
   { expression: '営業', reading: 'えいぎょう', meanings: { en: 'business, trade, management', ko: '영업' }, lang: 'ja', level: 'JLPT_N4' },
   { expression: '大人しい', reading: 'おとなしい', meanings: { en: 'obedient, docile, quiet', ko: '얌전한' }, lang: 'ja', level: 'JLPT_N4' },
   { expression: '音', reading: 'おん', meanings: { en: 'sound, note', ko: '소리' }, lang: 'ja', level: 'JLPT_N4' },

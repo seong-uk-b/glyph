@@ -26,12 +26,19 @@ function generateWordOptions(
   const toOption = (w: Word) =>
     mode === 'meaningToWord' ? getWordLabel(w) : getMeaning(w, language);
 
+  // 뜻→단어 모드에서는 문제(뜻)가 같은 단어가 오답으로 나오면 그것도 정답이라 부당하다.
+  // 예: 문제 '모레' → 明後日(あさって)와 明後日(みょうごにち) 둘 다 맞는데 하나만 정답 처리됨.
+  const correctMeaning = getMeaning(correctWord, language);
+  const isEquivalent = (w: Word) =>
+    mode === 'meaningToWord' && getMeaning(w, language) === correctMeaning;
+
   // 풀 전체를 복사·셔플하는 대신 랜덤 인덱스로 추출 — 풀이 수천 개여도 문제당 O(1)
   const used = new Set<string>([correctAnswer]);
   const wrongOptions: string[] = [];
   for (let attempts = 0; wrongOptions.length < count - 1 && attempts < 60; attempts++) {
     const candidate = allWords[Math.floor(Math.random() * allWords.length)];
     if (!candidate || candidate.expression === correctWord.expression) continue;
+    if (isEquivalent(candidate)) continue;
     const option = toOption(candidate);
     if (used.has(option)) continue;
     used.add(option);
