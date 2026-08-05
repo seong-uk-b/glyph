@@ -13,6 +13,20 @@ export function getMeaning(word: Word, lang: MeaningLanguage): string {
   return word.meanings[lang] ?? word.meanings.en;
 }
 
+// 괄호 주석 제거 — 표기/읽기 비교와 표시에 쓴다
+// (예: 읽기 'けっこん (する)' → 'けっこん', 표기 'パート (タイム)' → 'パート')
+function stripAnnotation(s: string): string {
+  return s.replace(/\s*[（(][^）)]*[）)]/g, '').trim();
+}
+
+/**
+ * 퀴즈 선택지·정답에 쓰는 단어 표시.
+ * 읽기가 표기와 같거나(가나 단어) 없으면 표기만 — `あそこ (あそこ)` 같은 중복을 막는다.
+ */
 export function getWordLabel(word: Word): string {
-  return word.reading ? `${word.expression} (${word.reading})` : word.expression;
+  const reading = stripAnnotation(word.reading ?? '');
+  if (!reading || reading === stripAnnotation(word.expression)) {
+    return word.expression;
+  }
+  return `${word.expression} (${reading})`;
 }
