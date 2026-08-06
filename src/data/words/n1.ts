@@ -189,7 +189,7 @@ export const n1Words: Word[] = [
   { expression: '優', reading: 'ゆう', meanings: { en: 'superiority, high grade', ko: '우수한' }, lang: 'ja', level: 'JLPT_N1' },
   { expression: '有機', reading: 'ゆうき', meanings: { en: 'organic', ko: '유기' }, lang: 'ja', level: 'JLPT_N1' },
   { expression: '世', reading: 'よ', meanings: { en: 'world, society, generation', ko: '세상' }, lang: 'ja', level: 'JLPT_N1' },
-  { expression: '弱まる', reading: 'よわまる', meanings: { en: 'to weaken, to be emaciated, to be dejected', ko: '약해지다' }, lang: 'ja', level: 'JLPT_N1' },
+  { expression: '弱まる', reading: 'よわまる', meanings: { en: 'to weaken, to abate, to decline', ko: '약해지다' }, lang: 'ja', level: 'JLPT_N1' },
   { expression: '弱める', reading: 'よわめる', meanings: { en: 'to weaken', ko: '약화시키다' }, lang: 'ja', level: 'JLPT_N1' },
   { expression: 'ラベル', reading: 'ラベル', meanings: { en: 'label', ko: '라벨' }, lang: 'ja', level: 'JLPT_N1' },
   { expression: 'ルール', reading: 'ルール', meanings: { en: 'rule', ko: '룰' }, lang: 'ja', level: 'JLPT_N1' },
