@@ -53,13 +53,39 @@ iOS 실기기 = Xcode ▶ (수동).
 읽히지 않는다 — `npm run deploy` 가 "Published" 를 출력해도 사이트는 갱신되지 않아
 배포됐다고 착각하게 만든다.
 
-"배포됐냐" 판정 = **push 여부가 아니라 Actions 성공 + 라이브 번들 해시 일치**:
+"배포됐냐" 판정 = **push 여부가 아니라 Actions 성공 + 라이브 번들에 변경 내용이 있는지**:
 
 ```bash
-git status -sb                                   # ahead 0 인지
-gh run list --limit 3                            # 최신 실행이 success 인지
-curl -s https://seong-uk-b.github.io/glyph/ | grep -o 'main\.[a-z0-9]*\.js'
-ls build/static/js/main.*.js                     # 위 결과와 같아야 반영 완료
+git status -sb          # ahead 0 인지
+gh run list --limit 3   # 최신 실행이 success 인지
+
+# 이번에 바꾼 문자열이 라이브 번들에 있는지 (아래 두 함정 때문에 스크립트로 확인한다)
+python3 - <<'EOF'
+import urllib.request, re
+CHANGED = ['함박스테이크', '고장 나다']          # 이번 변경에서 새로 들어간 값
+GONE    = ['함바그']                          # 없어져야 하는 옛 값
+esc = lambda s: ''.join(f'\\u{ord(c):04x}' if ord(c) > 127 else c for c in s)
+home = urllib.request.urlopen('https://seong-uk-b.github.io/glyph/').read().decode()
+js = re.search(r'main\.[a-z0-9]+\.js', home).group()
+b = urllib.request.urlopen(f'https://seong-uk-b.github.io/glyph/static/js/{js}').read().decode()
+for s in CHANGED: print('신규', s, esc(s) in b)   # 전부 True 여야 함
+for s in GONE:    print('구값', s, esc(s) in b)   # 전부 False 여야 함
+EOF
+```
+
+⚠️ 이 검증에서 틀리기 쉬운 두 가지 (2026-08-06 실측):
+
+1. **라이브 번들 해시는 로컬 `build/` 와 다른 것이 정상이다.** 로컬은 `build:ios`(`PUBLIC_URL=.`),
+   CI 는 `npm run build`(homepage 기준 `/glyph/`)로 빌드해 내용이 달라진다.
+   해시 불일치를 "배포 안 됨"으로 오판하지 말 것 — **내용으로 판정한다.**
+2. **번들의 한글은 `\uXXXX` 로 이스케이프되어 있다** (파일이 ASCII). `grep '함박스테이크'` 는
+   반드시 실패하므로, 위처럼 이스케이프로 변환해 찾아야 한다.
+
+mp3 는 파일 단위로 직접 확인한다 (id = `fnv1a(expression|reading)`):
+
+```bash
+curl -s -o /dev/null -w '%{http_code} %{size_download}\n' \
+  https://seong-uk-b.github.io/glyph/audio/ja/<id>.mp3   # 200 + 실제 크기여야 함
 ```
 
 ⚠️ Actions 실패 이력: `npm ci` 가 락파일 엄격 검증에 실패해 배포가 조용히 깨진 적이 있다
