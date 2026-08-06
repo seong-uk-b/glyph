@@ -3,7 +3,7 @@ import { Word } from '../types';
 
 // JLPT N5 Vocabulary
 // Source: tanos.co.uk 기반 + Anki 덱 보충, 레벨은 현대 학습 기준으로 재배정 (2026-08-04)
-// Total: 823 words
+// Total: 822 words
 
 export const n5Words: Word[] = [
   { expression: '会う', reading: 'あう', meanings: { en: 'to meet, to see', ko: '만나다' }, lang: 'ja', level: 'JLPT_N5' },
@@ -344,7 +344,7 @@ export const n5Words: Word[] = [
   { expression: '～中', reading: '～ちゅう', meanings: { en: 'during, while ~ing', ko: '~중' }, lang: 'ja', level: 'JLPT_N5' },
   { expression: '丁度', reading: 'ちょうど', meanings: { en: 'just, right, exactly', ko: '딱, 정확히' }, lang: 'ja', level: 'JLPT_N5' },
   { expression: 'ちょっと', reading: 'ちょっと', meanings: { en: 'a little, somewhat; just a little, somewhat', ko: '조금' }, lang: 'ja', level: 'JLPT_N5' },
-  { expression: '一日', reading: 'ついたち', meanings: { en: 'one day; first day of the month', ko: '1일 (매월 첫째 날)' }, lang: 'ja', level: 'JLPT_N5' },
+  { expression: '一日', reading: 'ついたち', meanings: { en: 'first day of the month', ko: '1일 (매월 첫째 날)' }, lang: 'ja', level: 'JLPT_N5' },
   { expression: '使う', reading: 'つかう', meanings: { en: 'to use', ko: '사용하다' }, lang: 'ja', level: 'JLPT_N5' },
   { expression: '次', reading: 'つぎ', meanings: { en: 'next', ko: '다음' }, lang: 'ja', level: 'JLPT_N5' },
   { expression: '机', reading: 'つくえ', meanings: { en: 'desk', ko: '책상' }, lang: 'ja', level: 'JLPT_N5' },
@@ -492,7 +492,6 @@ export const n5Words: Word[] = [
   { expression: '毎晩', reading: 'まいばん', meanings: { en: 'every night', ko: '매일 밤' }, lang: 'ja', level: 'JLPT_N5' },
   { expression: '前', reading: 'まえ', meanings: { en: 'before, in front', ko: '앞' }, lang: 'ja', level: 'JLPT_N5' },
   { expression: '～前', reading: '～まえ', meanings: { en: 'in front of ~', ko: '~앞' }, lang: 'ja', level: 'JLPT_N5' },
-  { expression: '曲る', reading: 'まがる', meanings: { en: 'to turn, to bend', ko: '돌다, 구부러지다' }, lang: 'ja', level: 'JLPT_N5' },
   { expression: 'まずい', reading: 'まずい', meanings: { en: 'terrible (in reference to food), unappetizing, unpleasant (taste)', ko: '맛없는' }, lang: 'ja', level: 'JLPT_N5' },
   { expression: 'また', reading: 'また', meanings: { en: 'and; furthermore', ko: '또' }, lang: 'ja', level: 'JLPT_N5' },
   { expression: 'まだ', reading: 'まだ', meanings: { en: 'yet, still, besides', ko: '아직' }, lang: 'ja', level: 'JLPT_N5' },
@@ -800,15 +799,15 @@ export const n5Words: Word[] = [
   { expression: '明日', reading: 'あす', meanings: { en: 'tomorrow', ko: '내일' }, lang: 'ja', level: 'JLPT_N5' },
   { expression: '上がる', reading: 'あがる', meanings: { en: 'to rise, to go up', ko: '오르다' }, lang: 'ja', level: 'JLPT_N5' },
   { expression: '下', reading: 'しも', meanings: { en: 'under, below, beneath', ko: '아래' }, lang: 'ja', level: 'JLPT_N5' },
-  { expression: '上', reading: 'じょう', meanings: { en: 'first volume; superior quality; governmental', ko: '상' }, lang: 'ja', level: 'JLPT_N5' },
-  { expression: '角', reading: 'すみ', meanings: { en: 'corner', ko: '모퉁이, 각' }, lang: 'ja', level: 'JLPT_N5' },
+  { expression: '上', reading: 'じょう', meanings: { en: 'first volume; superior quality; governmental', ko: '상권; 상등; 관청' }, lang: 'ja', level: 'JLPT_N5' },
+  { expression: '角', reading: 'すみ', meanings: { en: 'corner', ko: '구석' }, lang: 'ja', level: 'JLPT_N5' },
   { expression: 'いただきます', reading: 'いただきます', meanings: { en: 'expression of gratitude before meals', ko: '잘 먹겠습니다' }, lang: 'ja', level: 'JLPT_N5' },
   { expression: '一時', reading: 'いちじ', meanings: { en: 'for a time, temporarily', ko: '일시, 한때' }, lang: 'ja', level: 'JLPT_N5' },
-  { expression: '上', reading: 'うわ', meanings: { en: 'upper, outer, surface', ko: '상' }, lang: 'ja', level: 'JLPT_N5' },
+  { expression: '上', reading: 'うわ', meanings: { en: 'upper, outer, surface', ko: '겉, 바깥쪽' }, lang: 'ja', level: 'JLPT_N5' },
   { expression: '魚', reading: 'うお', meanings: { en: 'fish', ko: '물고기' }, lang: 'ja', level: 'JLPT_N5' },
   { expression: '円', reading: 'えん', meanings: { en: 'circle, yen', ko: '엔' }, lang: 'ja', level: 'JLPT_N5' },
   { expression: '男の人', reading: 'おとこのひと', meanings: { en: 'man', ko: '남자' }, lang: 'ja', level: 'JLPT_N5' },
-  { expression: '上', reading: 'かみ', meanings: { en: 'first volume; superior quality; governmental', ko: '상' }, lang: 'ja', level: 'JLPT_N5' },
+  { expression: '上', reading: 'かみ', meanings: { en: 'upper part, upper reaches; person of high rank; the authorities', ko: '위쪽, 상류; 윗사람; 관청' }, lang: 'ja', level: 'JLPT_N5' },
   { expression: '空', reading: 'から', meanings: { en: 'empty', ko: '빈 것, 텅 빔' }, lang: 'ja', level: 'JLPT_N5' },
   { expression: '位', reading: 'くらい', meanings: { en: 'grade, rank, about', ko: '정도, 위' }, lang: 'ja', level: 'JLPT_N5' },
   { expression: 'グラス', reading: 'グラス', meanings: { en: 'glass; grass', ko: '잔, 글라스' }, lang: 'ja', level: 'JLPT_N5' },

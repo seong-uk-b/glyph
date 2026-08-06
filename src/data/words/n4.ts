@@ -3,7 +3,7 @@ import { Word } from '../types';
 
 // JLPT N4 Vocabulary
 // Source: tanos.co.uk 기반 + Anki 덱 보충, 레벨은 현대 학습 기준으로 재배정 (2026-08-04)
-// Total: 1079 words (tanos 기반 + Anki 보충, 레벨 재배정)
+// Total: 1079 words
 
 export const n4Words: Word[] = [
   { expression: 'ああ', reading: 'ああ', meanings: { en: 'Ah!, Oh!', ko: '아아!, 오!' }, lang: 'ja', level: 'JLPT_N4' },
@@ -81,7 +81,7 @@ export const n4Words: Word[] = [
   { expression: '戸', reading: 'と', meanings: { en: 'door (Japanese style)', ko: '문' }, lang: 'ja', level: 'JLPT_N4' },
   { expression: '～時', reading: '～とき', meanings: { en: 'at the time of ~', ko: '~때, ~할 때' }, lang: 'ja', level: 'JLPT_N4' },
   { expression: '止まる', reading: 'とまる', meanings: { en: 'to come to a halt', ko: '멈추다' }, lang: 'ja', level: 'JLPT_N4' },
-  { expression: '取る', reading: 'とる', meanings: { en: 'to take (a class); to get (a grade)', ko: '가져가다' }, lang: 'ja', level: 'JLPT_N4' },
+  { expression: '取る', reading: 'とる', meanings: { en: 'to take (a class); to get (a grade)', ko: '잡다, 집다; (수업을) 듣다, (점수를) 받다' }, lang: 'ja', level: 'JLPT_N4' },
   { expression: '鳴く', reading: 'なく', meanings: { en: 'to make sound (animal)', ko: '울다 (동물)' }, lang: 'ja', level: 'JLPT_N4' },
   { expression: '七つ', reading: 'ななつ', meanings: { en: 'seven things', ko: '일곱 개' }, lang: 'ja', level: 'JLPT_N4' },
   { expression: '並ぶ', reading: 'ならぶ', meanings: { en: 'to line up, to stand in a line (v.i.)', ko: '줄서다' }, lang: 'ja', level: 'JLPT_N4' },
@@ -454,7 +454,7 @@ export const n4Words: Word[] = [
   { expression: '空港', reading: 'くうこう', meanings: { en: 'airport', ko: '공항' }, lang: 'ja', level: 'JLPT_N4' },
   { expression: '手袋', reading: 'てぶくろ', meanings: { en: 'glove(s)', ko: '장갑' }, lang: 'ja', level: 'JLPT_N4' },
   { expression: '校長', reading: 'こうちょう', meanings: { en: 'principal, headmaster', ko: '교장' }, lang: 'ja', level: 'JLPT_N4' },
-  { expression: 'ごちそう', reading: 'ごちそう', meanings: { en: 'feast, treating (someone)', ko: '잔치, 대접' }, lang: 'ja', level: 'JLPT_N4' },
+  { expression: 'ごちそう', reading: 'ごちそう', meanings: { en: 'feast, treating (someone)', ko: '맛있는 음식(진수성찬), 대접' }, lang: 'ja', level: 'JLPT_N4' },
   { expression: '踊り', reading: 'おどり', meanings: { en: 'dance', ko: '춤' }, lang: 'ja', level: 'JLPT_N4' },
   { expression: '興味', reading: 'きょうみ', meanings: { en: 'interest (in something)', ko: '흥미' }, lang: 'ja', level: 'JLPT_N4' },
   { expression: '引っ越す', reading: 'ひっこす', meanings: { en: 'to move to a new place of residence', ko: '이사하다' }, lang: 'ja', level: 'JLPT_N4' },
@@ -535,7 +535,7 @@ export const n4Words: Word[] = [
   { expression: 'おいでになる', reading: 'おいでになる', meanings: { en: '(hon.) to be', ko: '오시다' }, lang: 'ja', level: 'JLPT_N4' },
   { expression: '変わる', reading: 'かわる', meanings: { en: 'to change (v.i.), to be transformed, to vary', ko: '바뀌다' }, lang: 'ja', level: 'JLPT_N4' },
   { expression: '以外', reading: 'いがい', meanings: { en: 'other than, with the exception of, excepting', ko: '이외' }, lang: 'ja', level: 'JLPT_N4' },
-  { expression: 'ハンバーグ', reading: 'ハンバーグ', meanings: { en: 'hamburger steak', ko: '함바그' }, lang: 'ja', level: 'JLPT_N4' },
+  { expression: 'ハンバーグ', reading: 'ハンバーグ', meanings: { en: 'hamburger steak', ko: '함박스테이크' }, lang: 'ja', level: 'JLPT_N4' },
   { expression: '市', reading: 'し', meanings: { en: 'city', ko: '시' }, lang: 'ja', level: 'JLPT_N4' },
   { expression: '引き出し', reading: 'ひきだし', meanings: { en: 'drawer', ko: '서랍' }, lang: 'ja', level: 'JLPT_N4' },
   { expression: '遊び', reading: 'あそび', meanings: { en: 'play', ko: '놀이' }, lang: 'ja', level: 'JLPT_N4' },
@@ -638,7 +638,7 @@ export const n4Words: Word[] = [
   { expression: '召し上がる', reading: 'めしあがる', meanings: { en: '-- honorific form of 食べる (たべる) and 飲む (のむ) --', ko: '드시다 (존경어)' }, lang: 'ja', level: 'JLPT_N4' },
   { expression: '太る', reading: 'ふとる', meanings: { en: 'to gain weight', ko: '살찌다' }, lang: 'ja', level: 'JLPT_N4' },
   { expression: '様', reading: 'よう', meanings: { en: 'way, manner, kind', ko: '모양, 방식' }, lang: 'ja', level: 'JLPT_N4' },
-  { expression: '～おき', reading: '～おき', meanings: { en: 'after every ~', ko: '~마다' }, lang: 'ja', level: 'JLPT_N4' },
+  { expression: '～おき', reading: '～おき', meanings: { en: 'every other, at intervals of', ko: '~걸러, ~간격으로' }, lang: 'ja', level: 'JLPT_N4' },
   { expression: '最初', reading: 'さいしょ', meanings: { en: 'beginning, first', ko: '처음' }, lang: 'ja', level: 'JLPT_N4' },
   { expression: '御～', reading: 'ご～', meanings: { en: 'honorable ~', ko: '~(존경 접두어)' }, lang: 'ja', level: 'JLPT_N4' },
   { expression: '安心', reading: 'あんしん', meanings: { en: 'peace of mind, relief', ko: '안심' }, lang: 'ja', level: 'JLPT_N4' },
