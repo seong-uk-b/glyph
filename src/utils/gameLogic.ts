@@ -6,8 +6,10 @@ const ROMAJI_ALTERNATIVES: Record<string, string[]> = {
   'tsu': ['tu'],
   'fu': ['hu'],
   'ji': ['zi'],
-  'di': ['dzi'],
-  'du': ['dzu'],
+  // づ·ぢ 는 IME 관례(du/di)를 정답으로 두되, 헵번식 표기(zu/ji)도 허용한다.
+  // 판정은 문제별로 독립이라 ず(zu)·じ(ji) 와 충돌하지 않는다.
+  'di': ['dzi', 'ji'],
+  'du': ['dzu', 'zu'],
   'wo': ['o'],
   'n': ['nn'],
 };
