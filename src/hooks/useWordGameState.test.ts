@@ -12,6 +12,12 @@ const SAME_MEANING = [
   ja('明後日', 'みょうごにち', '모레'),
   ja('明々後日', 'しあさって', '모레'),
 ];
+// 읽기가 겹치는 단어들 — 듣기 모드에서 발음만으로는 구별할 수 없다
+const SAME_SOUND = [
+  ja('暑い', 'あつい', '더운'),
+  ja('熱い', 'あつい', '뜨거운'),
+  ja('厚い', 'あつい', '두꺼운'),
+];
 const OTHERS = Array.from({ length: 20 }, (_, i) => ja(`語${i}`, `ご${i}`, `뜻${i}`));
 
 function config(overrides: Partial<WordGameConfig> = {}): WordGameConfig {
@@ -50,6 +56,20 @@ describe('generateWordOptions — 동일한 뜻 오답 배제', () => {
     const q = result.current.currentQuestion;
     expect(q).toBeTruthy();
     expect(new Set(q!.options).size).toBe(q!.options.length);
+  });
+
+  it('듣기 모드에서 읽기가 같은 단어의 뜻은 오답 선택지로 쓰지 않는다', () => {
+    // 발음 'あつい' 만 들려주고 暑い/熱い/厚い 중 고르라면 소리로 구별할 방법이 없다
+    const meanings = new Set(SAME_SOUND.map(w => w.meanings.ko!));
+    for (let run = 0; run < 40; run++) {
+      const { result } = renderHook(() =>
+        useWordGameState(config({ gameMode: 'listening', customWords: [...SAME_SOUND, ...OTHERS] })),
+      );
+      const q = result.current.currentQuestion;
+      if (!q || (q.word.reading ?? '') !== 'あつい') continue;
+      const ambiguous = q.options.filter(o => meanings.has(o));
+      expect(ambiguous).toHaveLength(1); // 정답 하나뿐
+    }
   });
 
   it('정답이 항상 선택지에 포함된다', () => {
